@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/Debian) (preloaded format=pdflatex 2021.8.11)  1 SEP 2021 15:18
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/Debian) (preloaded format=pdflatex 2021.8.11)  2 SEP 2021 20:41
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -791,16 +791,13 @@ Overfull \hbox (10.24185pt too wide) in paragraph at lines 55--56
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./peceptron.png> <./nn.jpg
 >] [2 <./mesh.png>] [3] (./thesis.aux)
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
 Package rerunfilecheck Info: File `thesis.out' has not changed.
 (rerunfilecheck)             Checksum: 21DD6CE6F088456D9D02C01E9620A3EC;1118.
  ) 
 Here is how much of TeX's memory you used:
  19596 strings out of 481209
  365243 string characters out of 5914747
- 654402 words of memory out of 5000000
+ 657402 words of memory out of 5000000
  36137 multiletter control sequences out of 15000+600000
  410340 words of font info for 54 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
@@ -812,7 +809,7 @@ ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/tex
 mf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist
 /fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/
 type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on thesis.pdf (3 pages, 557987 bytes).
+Output written on thesis.pdf (3 pages, 558680 bytes).
 PDF statistics:
  147 PDF objects out of 1000 (max. 8388607)
  128 compressed objects within 2 object streams

@@ -9,8 +9,8 @@ import os
 import soundfile as sf #For writing
 import matplotlib.pyplot as plt
 
-import wandb
-wandb.init(project='noizenet', entity='liamwatson')
+# import wandb
+# wandb.init(project='noizenet', entity='liamwatson')
 # %matplotlib inline
 #############################################################################
 
@@ -34,7 +34,7 @@ def normalize(v):
 
 files = os.listdir("/home/liam/Desktop/University/2021/MAM3040W/thesis/works/playground/wavs/fma_small/000/")
 # print(files)
-duration = 1
+duration = 30
 y, sr = lib.load("/home/liam/Desktop/University/2021/MAM3040W/thesis/works/playground/wavs/fma_small/000/" + files[0], mono=True, duration = duration)
 # for x in range(y.size):
 #     if y[x] == 0:
@@ -45,12 +45,12 @@ y, sr = lib.load("/home/liam/Desktop/University/2021/MAM3040W/thesis/works/playg
 #         y[x] = 1
 # print(y, sr)
 # print(np.mean(y))
-sf.write('test.wav', y, sr)
+sf.write('/home/liam/Desktop/University/2021/MAM3040W/thesis/writeup/code/uhh.wav', y, sr,format="wav")
 
 
 seq_length = sr*duration
 
-time_steps = np.linspace(0, sr , seq_length + 1)
+time_steps = np.linspace(0, seq_length , seq_length + 1)
 data = y
 data = np.resize(data,((seq_length+1), 1))
 x = data[:-1]
@@ -76,6 +76,7 @@ class NoizeNet(nn.Module):
     def __init__(self, input_size, output_size, hidden_dim, n_layers):
         super(NoizeNet, self).__init__()
 
+            
         self.hidden_dim = hidden_dim
 
         # define an RNN with specified parameters
@@ -90,10 +91,17 @@ class NoizeNet(nn.Module):
         # hidden (n_layers, batch_size, hidden_dim)
         # r_out (batch_size, time_step, hidden_size)
         batch_size = x.size(0)
-
+        if (train_on_gpu):
+            x.cuda()
+        else:
+            x.cpu()
         # get RNN outputs
         r_out, hidden = self.rnn(x , hidden)
         # shape output to be (batch_size*seq_length, hidden_dim)
+        if (train_on_gpu):
+            hidden.cuda()
+        else:
+            hidden
         r_out = r_out.view(-1, self.hidden_dim)
 
         # get final output
@@ -102,33 +110,14 @@ class NoizeNet(nn.Module):
         return output, hidden
 
 
-#######################################################################################################################
-# test that dimensions are as expected
-# test_rnn = NoizeNet(input_size=1, output_size=1, hidden_dim=100, n_layers=3)
-
-# # generate evenly spaced, test data pts
-# time_steps = np.linspace(0, sr*duration, seq_length)
-# # data = data
-# # data.resize((seq_length, 1))
-
-# test_input = torch.Tensor(data).unsqueeze(0) # give it a batch_size of 1 as first dimension
-# print('Input size: ', test_input.size())
-
-# # test out rnn sizes
-# test_out, test_h = test_rnn(test_input, None)
-# print('Output size: ', test_out.size())
-# print('Hidden state size: ', test_h.size())
-
-
-
 #####################################################################################################################
 
 # decide on hyperparameters
-n_steps = 100
+n_steps = 50
 input_size=1
 output_size=1
-hidden_dim=100
-n_layers=2
+hidden_dim=50
+n_layers=1
 
 # instantiate an RNN
 noizeNet = NoizeNet(input_size, output_size, hidden_dim, n_layers)
@@ -145,9 +134,13 @@ optimizer = torch.optim.Adam(noizeNet.parameters(), lr=0.01)
 def train(noizeNet, n_steps, print_every, data, sr):
     # initialize the hidden state
     hidden = None
-
+    music = []
     for batch_i in (range(0, n_steps)):
         # defining the training data
+
+        if(train_on_gpu):
+            noizeNet.cuda()
+
         time_steps = np.linspace((int)((sr*batch_i)/n_steps), (int)((sr*(batch_i+1))/n_steps), (int)(sr/n_steps))
         # data = np.resize((seq_length+1), 1)
         # data[0, sr]
@@ -159,7 +152,9 @@ def train(noizeNet, n_steps, print_every, data, sr):
         # convert data into Tensors
         x_tensor = torch.Tensor(x).unsqueeze(0)  # unsqueeze gives a 1, batch_size dimension
         y_tensor = torch.Tensor(y)
-        print(x_tensor.size())
+        if(train_on_gpu):
+                x_tensor, y_tensor = x_tensor.cuda(), y_tensor.cuda()
+        # print(x_tensor.size())
         # outputs from the rnn
         prediction, hidden = noizeNet(x_tensor, hidden)
 
@@ -181,9 +176,17 @@ def train(noizeNet, n_steps, print_every, data, sr):
         print('Loss: ', loss.item())
         print(len(x))
         # plt.plot(time_steps[1:], x[(int)((sr*step)/n_steps), (int)(sr*(step+1)/n_steps)], 'r.')  # input
-        plt.plot(time_steps[1:], prediction.data.numpy().flatten()[(int)((sr*batch_i)/n_steps)+1: (int)(sr*(batch_i+1)/n_steps)], 'g.', markersize=0.5)  # predictions
+        # prediction
+        music = (prediction.cpu().data.numpy().flatten())
+        large_time = np.linspace(0, seq_length , seq_length + 1)
+        # plt.plot(time_steps[1:], prediction.cpu().data.numpy().flatten()[(int)((sr*batch_i)/n_steps)+1: (int)(sr*(batch_i+1)/n_steps)], 'g.', markersize=0.2)  # predictions
+        plt.plot(large_time[1:], prediction.cpu().data.numpy().flatten(), 'g.', markersize=0.2)
         plt.show(block = False)
+        
         plt.pause(.001)
+    # sf.write("./uhh.wav", np.array(music) ,sr)
+    # print(music.type(), np.array(music).type())
+    sf.write('/home/liam/Desktop/University/2021/MAM3040W/thesis/writeup/code/outputSoundFile.wav', music, 22050,format="WAV")
     return noizeNet
 
 ###################################################################################################################

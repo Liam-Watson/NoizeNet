@@ -139,13 +139,14 @@ def train(noizeNet, n_steps, print_every, data, sr, files):
         y, sr = lib.load("/home/liam/Desktop/University/2021/MAM3040W/thesis/works/playground/wavs/fma_small/000/" + f, mono=True, duration = duration)
         data = y
         data = np.resize(data,((seq_length+1), 1))
+        count = 0
         for batch_i in (range(0, n_steps)):
             # defining the training data
 
             if(train_on_gpu):
                 noizeNet.cuda()
 
-            time_steps = np.linspace((int)((sr*batch_i)/n_steps), (int)((sr*(batch_i+1))/n_steps), (int)(sr/n_steps))
+            # time_steps = np.linspace((int)((sr*batch_i)/n_steps), (int)((sr*(batch_i+1))/n_steps), (int)(sr/n_steps))
             # data = np.resize((seq_length+1), 1)
             # data[0, sr]
             # data.resize((seq_length + 1, 1))  # input_size=1
@@ -177,17 +178,27 @@ def train(noizeNet, n_steps, print_every, data, sr, files):
 
             # display loss and predictions
             #if batch_i % print_every == 0:
-            print('Loss: ', loss.item())
-            print(len(x))
+            count+=1
+            print('Loss: ', loss.item(), "\t num:", count)
+
+            # print(len(x))
             # plt.plot(time_steps[1:], x[(int)((sr*step)/n_steps), (int)(sr*(step+1)/n_steps)], 'r.')  # input
             # prediction
-            music = (prediction.cpu().data.numpy().flatten())
-            large_time = np.linspace(0, seq_length , seq_length + 1)
+            # music = (prediction.cpu().data.numpy().flatten())
+            # large_time = np.linspace(0, seq_length , seq_length + 1)
             # plt.plot(time_steps[1:], prediction.cpu().data.numpy().flatten()[(int)((sr*batch_i)/n_steps)+1: (int)(sr*(batch_i+1)/n_steps)], 'g.', markersize=0.2)  # predictions
-            plt.plot(large_time[1:], prediction.cpu().data.numpy().flatten(), 'g.', markersize=0.2)
-            plt.show(block = False)
+            # plt.plot(large_time[1:], prediction.cpu().data.numpy().flatten(), 'g.', markersize=0.2)
+            # plt.show(block = False)
             
-            plt.pause(.001)
+            # plt.pause(.001)
+        del prediction
+        del hidden
+        del x_tensor
+        del y_tensor
+        del data
+        del x
+        del y
+        gc.collect()
     # sf.write("./uhh.wav", np.array(music) ,sr)
     # print(music.type(), np.array(music).type())
     sf.write('/home/liam/Desktop/University/2021/MAM3040W/thesis/writeup/code/outputSoundFile.wav', music, 22050,format="WAV")
@@ -200,4 +211,5 @@ print_every = 5
 test_input = torch.Tensor(data).unsqueeze(0)
 print(test_input.size())
 trained_rnn = train(noizeNet, n_steps, print_every, data = data, sr = sr, files=files)
+torch.save(trained_rnn.state_dict(), "./trained.pt")
 

@@ -20,7 +20,7 @@
 
 \geometry{legalpaper, margin=0.7in}
 
-\title{Noize net}
+\title{Noize net | WORK IN PROGRESS}
 \author{Liam Watson}
 \begin{document}
 \maketitle
@@ -100,15 +100,35 @@ f(x) =
 
 \label{sec:activationfuncs}
 
-\subsection{Error functions}
-\label{sec:error}
-
 \subsection{Feed forward}
 \label{sec:forward}
-
-\subsection{Back propication}
+NB: NEED TO WRITE MUCH MORE HERE
+During the feed forward stage of a network we will recieve input's at the input neurons and travel through all the network layer calculating sum's and activations until the algorithm reaches the output layer.
+\subsection{Error functions}
+\label{sec:error}
+Once we have output from the model, we need a metric for the error between the output and ground truth, an error function. There are many error functions that appear in the litterature, however, their use is often highly application dependent. In the case of Noize net we are dealing with simple two dimensional time series data and as such the relevant error functions are elementary:
+\begin{enumerate}
+\item Mean Square Error (MSE)\\
+This error function finds the averadge square difference between the predicted value and ground truth, defined as
+\begin{align*}
+MSE = \frac{\sum_{i=0}^N (y_i - y_i^\prime)^2}{N}
+\end{align*}
+Where $N$ is the number of output values, $y_i$ is the ground truth value and $y_i^\prime$ is the predicted value. \\
+This loss function is favorable because of it's simplicity and computational efficiency. One should note that MSE can "amplify" large errors and squah small errors due to the square and notice that the direction of the error is also ignored.  
+\item Mean absolute error \\
+If one would not like to square the error in order to better capture small errors one can use the MAE function which shares many similar properties with the MSE function but more accurately depicts the difference between a prediction and the ground truth. 
+\begin{align*}
+MAE = \frac{\sum_{i=0}^N |y_i - y_i^\prime|}{N}
+\end{align*}
+\item Mean Bias error \\
+If the appliction requires a signed error function the MBE error function could be applicable. However, one should note that possitive and negative values may cancel each other out leading to unpredicatble results in practice. 
+\begin{align*}
+MBE = \frac{\sum_{i=0}^N (y_i - y_i^\prime)}{N}
+\end{align*}
+\end{enumerate}
+\subsection{Back propigation}
 \label{sec:back}
-
+Back prop
 
 \section{Intorduction to Recurrant Neural Networks}
 \label{sec:intoRNNs}

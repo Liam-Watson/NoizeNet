@@ -113,7 +113,7 @@ class NoizeNet(nn.Module):
 #####################################################################################################################
 
 # decide on hyperparameters
-n_steps = 50
+n_steps = 10
 input_size=1
 output_size=1
 hidden_dim=50
@@ -131,59 +131,63 @@ optimizer = torch.optim.Adam(noizeNet.parameters(), lr=0.01)
 ######################################################################################################################
 
 # train the RNN
-def train(noizeNet, n_steps, print_every, data, sr):
+def train(noizeNet, n_steps, print_every, data, sr, files):
     # initialize the hidden state
     hidden = None
     music = []
-    for batch_i in (range(0, n_steps)):
-        # defining the training data
+    for f in files:
+        y, sr = lib.load("/home/liam/Desktop/University/2021/MAM3040W/thesis/works/playground/wavs/fma_small/000/" + f, mono=True, duration = duration)
+        data = y
+        data = np.resize(data,((seq_length+1), 1))
+        for batch_i in (range(0, n_steps)):
+            # defining the training data
 
-        if(train_on_gpu):
-            noizeNet.cuda()
+            if(train_on_gpu):
+                noizeNet.cuda()
 
-        time_steps = np.linspace((int)((sr*batch_i)/n_steps), (int)((sr*(batch_i+1))/n_steps), (int)(sr/n_steps))
-        # data = np.resize((seq_length+1), 1)
-        # data[0, sr]
-        # data.resize((seq_length + 1, 1))  # input_size=1
+            time_steps = np.linspace((int)((sr*batch_i)/n_steps), (int)((sr*(batch_i+1))/n_steps), (int)(sr/n_steps))
+            # data = np.resize((seq_length+1), 1)
+            # data[0, sr]
+            # data.resize((seq_length + 1, 1))  # input_size=1
 
-        x = data[:-1]
-        y = data[1:]
+            x = data[:-1]
+            y = data[1:]
 
-        # convert data into Tensors
-        x_tensor = torch.Tensor(x).unsqueeze(0)  # unsqueeze gives a 1, batch_size dimension
-        y_tensor = torch.Tensor(y)
-        if(train_on_gpu):
-                x_tensor, y_tensor = x_tensor.cuda(), y_tensor.cuda()
-        # print(x_tensor.size())
-        # outputs from the rnn
-        prediction, hidden = noizeNet(x_tensor, hidden)
+            # convert data into Tensors
+            x_tensor = torch.Tensor(x).unsqueeze(0)  # unsqueeze gives a 1, batch_size dimension
+            y_tensor = torch.Tensor(y)
+            if(train_on_gpu):
+                    x_tensor, y_tensor = x_tensor.cuda(), y_tensor.cuda()
+            # print(x_tensor.size())
+            # outputs from the rnn
+            prediction, hidden = noizeNet(x_tensor, hidden)
 
-        ## Representing Memory ##
-        # make a new variable for hidden and detach the hidden state from its history
-        # this way, we don't backpropagate through the entire history
-        hidden = hidden.data
+            ## Representing Memory ##
+            # make a new variable for hidden and detach the hidden state from its history
+            # this way, we don't backpropagate through the entire history
+            hidden = hidden.data
 
-        # calculate the loss
-        loss = criterion(prediction, y_tensor)
-        # zero gradients
-        optimizer.zero_grad()
-        # perform backprop and update weights
-        loss.backward()
-        optimizer.step()
+            # calculate the loss
+            loss = criterion(prediction, y_tensor)
+            # zero gradients
+            optimizer.zero_grad()
+            # perform backprop and update weights
+            loss.backward()
+            optimizer.step()
 
-        # display loss and predictions
-        #if batch_i % print_every == 0:
-        print('Loss: ', loss.item())
-        print(len(x))
-        # plt.plot(time_steps[1:], x[(int)((sr*step)/n_steps), (int)(sr*(step+1)/n_steps)], 'r.')  # input
-        # prediction
-        music = (prediction.cpu().data.numpy().flatten())
-        large_time = np.linspace(0, seq_length , seq_length + 1)
-        # plt.plot(time_steps[1:], prediction.cpu().data.numpy().flatten()[(int)((sr*batch_i)/n_steps)+1: (int)(sr*(batch_i+1)/n_steps)], 'g.', markersize=0.2)  # predictions
-        plt.plot(large_time[1:], prediction.cpu().data.numpy().flatten(), 'g.', markersize=0.2)
-        plt.show(block = False)
-        
-        plt.pause(.001)
+            # display loss and predictions
+            #if batch_i % print_every == 0:
+            print('Loss: ', loss.item())
+            print(len(x))
+            # plt.plot(time_steps[1:], x[(int)((sr*step)/n_steps), (int)(sr*(step+1)/n_steps)], 'r.')  # input
+            # prediction
+            music = (prediction.cpu().data.numpy().flatten())
+            large_time = np.linspace(0, seq_length , seq_length + 1)
+            # plt.plot(time_steps[1:], prediction.cpu().data.numpy().flatten()[(int)((sr*batch_i)/n_steps)+1: (int)(sr*(batch_i+1)/n_steps)], 'g.', markersize=0.2)  # predictions
+            plt.plot(large_time[1:], prediction.cpu().data.numpy().flatten(), 'g.', markersize=0.2)
+            plt.show(block = False)
+            
+            plt.pause(.001)
     # sf.write("./uhh.wav", np.array(music) ,sr)
     # print(music.type(), np.array(music).type())
     sf.write('/home/liam/Desktop/University/2021/MAM3040W/thesis/writeup/code/outputSoundFile.wav', music, 22050,format="WAV")
@@ -195,5 +199,5 @@ n_steps = 75
 print_every = 5
 test_input = torch.Tensor(data).unsqueeze(0)
 print(test_input.size())
-trained_rnn = train(noizeNet, n_steps, print_every, data = data, sr = sr)
+trained_rnn = train(noizeNet, n_steps, print_every, data = data, sr = sr, files=files)
 

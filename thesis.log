@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/Debian) (preloaded format=pdflatex 2021.8.11)  5 SEP 2021 10:04
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/Debian) (preloaded format=pdflatex 2021.8.11)  5 SEP 2021 17:08
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -791,8 +791,17 @@ Overfull \hbox (10.24185pt too wide) in paragraph at lines 55--56
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./peceptron.png> <./nn.jpg
 >] [2 <./mesh.png>] [3] (./thesis.aux)
-Package rerunfilecheck Info: File `thesis.out' has not changed.
-(rerunfilecheck)             Checksum: 84704DE0613A8E7C034AEB3EAA95D172;1118.
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+
+Package rerunfilecheck Warning: File `thesis.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `thesis.out':
+(rerunfilecheck)             Before: 84704DE0613A8E7C034AEB3EAA95D172;1118
+(rerunfilecheck)             After:  6BDD86CFF029D764579009B1BC6CF67E;1118.
  ) 
 Here is how much of TeX's memory you used:
  19599 strings out of 481209
@@ -801,7 +810,7 @@ Here is how much of TeX's memory you used:
  36137 multiletter control sequences out of 15000+600000
  410340 words of font info for 54 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 113i,16n,133p,525b,412s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 113i,16n,133p,525b,420s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texl
@@ -812,7 +821,7 @@ type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
 ublic/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/am
 sfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
 /cm/cmsy7.pfb>
-Output written on thesis.pdf (3 pages, 588210 bytes).
+Output written on thesis.pdf (3 pages, 588692 bytes).
 PDF statistics:
  163 PDF objects out of 1000 (max. 8388607)
  141 compressed objects within 2 object streams

@@ -13,52 +13,8 @@ import sklearn.utils, sklearn.preprocessing, sklearn.decomposition, sklearn.svm
 import sklearn as skl
 import pandas as pd
 import utils
+import librosa.display
 
-
-# import wandb
-# wandb.init(project='noizenet', entity='liamwatson')
-# %matplotlib inline
-#############################################################################
-
-# # 2. Save model inputs and hyperparameters
-# config = wandb.config
-# config.learning_rate = 0.01
-
-# # 3. Log gradients and model parameters
-# wandb.watch(model)
-# for batch_idx, (data, target) in enumerate(train_loader):
-#   ...
-#   if batch_idx % args.log_interval == 0:
-#     # 4. Log metrics to visualize performance
-#     wandb.log({"loss": loss})
-
-#Get metadata for fma dataset
-# tracks = utils.load('data/fma_metadata/tracks.csv')
-# genres = utils.load('data/fma_metadata/genres.csv')
-# features = utils.load('data/fma_metadata/features.csv')
-# echonest = utils.load('data/fma_metadata/echonest.csv')
-
-files = os.listdir("/home/liam/Desktop/University/2021/MAM3040W/thesis/works/playground/wavs/fma_small/000/")
-print(files)
-duration = 5
-y, sr = lib.load("/home/liam/Desktop/University/2021/MAM3040W/thesis/works/playground/wavs/fma_small/000/" + files[4], mono=True, duration = duration)
-sf.write('/home/liam/Desktop/University/2021/MAM3040W/thesis/writeup/code/input.wav', y, sr,format="wav")
-print(sr)
-
-
-seq_length = sr*duration
-
-time_steps = np.linspace(0, seq_length , seq_length + 1)
-data = y
-data = np.resize(data,((seq_length+1), 1))
-x = data[:-1]
-y = data[1:]
-# plt.plot(time_steps[1:], x, 'r.', label='input, x', markersize=0.1) # x
-# plt.plot(time_steps[1:], y, 'b.', label='target, y', markersize=0.1) # y
-
-# plt.legend(loc='best')
-# plt.show(block = False)
-# plt.pause(1)
 
 # First checking if GPU is available
 train_on_gpu=torch.cuda.is_available()
@@ -146,13 +102,11 @@ optimizer = torch.optim.Adam(noizeNet.parameters(), lr=0.001)
 ######################################################################################################################
 
 # train the RNN
-def train(noizeNet, n_steps, print_every, data, sr, files, step_size=1):
-    # initialize the hidden state
+def train(noizeNet, n_steps, AUDIO_DIR, genreTracks, step_size=1, duration=5):
     count = 0
-    #TODO: Change this back to files not files[]
-    files=files[:1]
     fileCount = 0
-    for f in files:
+    for f in genreTracks[0]:
+        print(f)
         fileCount+=1
         hidden = None
         c0 = None #LSTM!
@@ -217,7 +171,7 @@ def train(noizeNet, n_steps, print_every, data, sr, files, step_size=1):
     return noizeNet
 
 ###################################################################################################################
-def predict(noizeNet, duration, n_steps):
+def predict(noizeNet, duration=5, n_steps=30):
     print("PREDICTING...")
     noizeNet.eval()
     hidden = None
@@ -278,14 +232,34 @@ def predict(noizeNet, duration, n_steps):
     return music
 ###################################################################################################################
 
+
+
+#Get metadata for fma dataset
+AUDIO_DIR = "data/fma_small/"
+
+tracks = utils.load('data/fma_metadata/tracks.csv')
+# genres = utils.load('data/fma_metadata/genres.csv') #Not needed
+# features = utils.load('data/fma_metadata/features.csv') #Not needed
+# echonest = utils.load('data/fma_metadata/echonest.csv') #Not needed 
+
+small = tracks['set', 'subset'] <= 'small'
+genre1 = tracks['track', 'genre_top'] == 'Instrumental'
+genre2 = tracks['track', 'genre_top'] == 'Hip-Hop' #We can set multilpe genres bellow as (genre1 | genre2)
+genreTracks = tracks.loc[small & (genre1), ('track', 'number')]
+X = tracks.loc[small & (genre1)]
+for g in X :
+    print(g)
+
+#Set if we want to train new model or load and predict with saved model
 TRAIN = True
 
 if TRAIN:
     n_steps = 30
     print_every = 5
     step_size =  1
+    duration = 5
     print("TRAINING...")
-    trained_rnn = train(noizeNet, n_steps, print_every, data = data, sr = sr, files=files, step_size=step_size)
+    trained_rnn = train(noizeNet, n_steps,AUDIO_DIR, genreTracks, step_size=step_size, duration = duration)
     torch.save(trained_rnn.state_dict(), "/home/liam/Desktop/University/2021/MAM3040W/thesis/writeup/smallTrainingV1LSTM.pt")
     predict(noizeNet=trained_rnn, duration=duration, n_steps=n_steps)
 
@@ -303,71 +277,11 @@ else:
     # model = TheModelClass(*args, **kwargs)
     noizeNet.load_state_dict(torch.load("/home/liam/Desktop/University/2021/MAM3040W/thesis/writeup/trainedBtchv2.pt"))
     predict(noizeNet=noizeNet, duration=duration, n_steps=n_steps)
-    # n_steps = 30
-    # input_size=1
-    # output_size=1
-    # hidden_dim=50
-    # step_size =  1
-    # n_layers=1
-    # # instantiate an RNN
-    # noizeNet = NoizeNet(input_size, output_size, hidden_dim, n_layers)
-    # # model = TheModelClass(*args, **kwargs)
-    # noizeNet.load_state_dict(torch.load("/home/liam/Desktop/University/2021/MAM3040W/thesis/writeup/trainedBtchv2.pt"))
-    # noizeNet.eval()
-    # # prediction, hidden = noizeNet(x_tensor, hidden)
 
-    # hidden = None
-    # music = []
-    # y, sr = lib.load("/home/liam/Desktop/University/2021/MAM3040W/thesis/works/playground/wavs/fma_small/000/" + files[1], mono=True, duration = duration)
-    # data = y
-    # # music = np.zeros(shape=y.shape)
-    # # data = np.resize(data,((seq_length+1), 1))
-    # # data = np.random.normal(-1,1,y.shape)
-
-    # batch_size = (int)(duration*sr/n_steps)
-    # number_of_steps = len(data)-batch_size
-    # music = y[0 : batch_size].flatten()
-    # print(type(music), music.size)
-    # for batch_i in (range(0, number_of_steps)):
-    #     # defining the training data
-
-    #     if(train_on_gpu):
-    #         noizeNet.cuda()
-
-    #     time_steps = np.linspace((int)(batch_i), (int)((batch_i + batch_size)), (int)(batch_size))
-    #     # print(data.size)
-    #     data = data[(batch_i): batch_size + batch_size]
-    #     # data = np.resize(data, (seq_length+1), 1)
-    #     data = np.resize(data,((batch_size), 1))
-    #     # print(data.size, sr*batch_i, step_size*batch_i)
-    #     # print(batch_i, number_of_steps)
-    #     # data.resize((seq_length + 1, 1))  # input_size=1
-
-    #     x = data[:-1]
-    #     y = data[1:]
-
-    #     # convert data into Tensors
-    #     x_tensor = torch.Tensor(x).unsqueeze(0)  # unsqueeze gives a 1, batch_size dimension
-    #     y_tensor = torch.Tensor(y)
-    #     if(train_on_gpu):
-    #             x_tensor, y_tensor = x_tensor.cuda(), y_tensor.cuda()
-    #     # print(x_tensor.size())
-    #     # outputs from the rnn
-    #     prediction, hidden = noizeNet(x_tensor, hidden)
-
-    #     music = np.append(music, (prediction.cpu().data.numpy().flatten()[-1]))
-    #     #music.extend(prediction.cpu().data.numpy().flatten())
-    #     # print((music.size), (prediction.cpu().data.numpy().flatten()[-1]))
-    #     ## Representing Memory ##
-    #     # make a new variable for hidden and detach the hidden state from its history
-    #     # this way, we don't backpropagate through the entire history
-    #     hidden = hidden.data
-    # # print(music[-5:])
-    # time_steps = np.linspace(0, music.size, music.size)
- 
-    # sf.write('/home/liam/Desktop/University/2021/MAM3040W/thesis/writeup/code/outputSoundFile.wav', music, 22050,format="WAV")
-    # plt.plot(time_steps, music)
-
-
-
+#TODO This is how to plot
+# fig, ax = plt.subplots(nrows=3, sharex=True)
+# ax[0].set(title='Envelope view, mono')
+# ax[0].label_outer()
+# lib.display.waveshow(y, sr=sr, ax=ax[0])
+# plt.show()
 

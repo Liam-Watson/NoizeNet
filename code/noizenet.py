@@ -105,12 +105,12 @@ optimizer = torch.optim.Adam(noizeNet.parameters(), lr=0.001)
 def train(noizeNet, n_steps, AUDIO_DIR, genreTracks, step_size=1, duration=5):
     count = 0
     fileCount = 0
-    for f in genreTracks[0]:
-        print(f)
+    for id in genreTracks:
+        filename = utils.get_audio_path(AUDIO_DIR, id) #Get the actual path to the file from the id
         fileCount+=1
         hidden = None
         c0 = None #LSTM!
-        fileData, sr = lib.load("/home/liam/Desktop/University/2021/MAM3040W/thesis/works/playground/wavs/fma_small/000/" + f, mono=True, duration = duration)
+        fileData, sr = lib.load(filename, mono=True, duration = duration)
         batch_size = (int)(duration*sr/n_steps)
         number_of_steps = len(fileData)-batch_size
         print("BATCH SIZE:",  batch_size, "\nNUMBER OF BATCHES:", n_steps ,"\nNUMBER OF STEPS: ", number_of_steps)
@@ -243,12 +243,13 @@ tracks = utils.load('data/fma_metadata/tracks.csv')
 # echonest = utils.load('data/fma_metadata/echonest.csv') #Not needed 
 
 small = tracks['set', 'subset'] <= 'small'
+# print(small['track_id'])
 genre1 = tracks['track', 'genre_top'] == 'Instrumental'
 genre2 = tracks['track', 'genre_top'] == 'Hip-Hop' #We can set multilpe genres bellow as (genre1 | genre2)
-genreTracks = tracks.loc[small & (genre1), ('track', 'number')]
+genreTracks = list(tracks.loc[small & (genre1),('track', 'genre_top')].index)
 X = tracks.loc[small & (genre1)]
-for g in X :
-    print(g)
+# for g in genreTracks:
+print(genreTracks)
 
 #Set if we want to train new model or load and predict with saved model
 TRAIN = True

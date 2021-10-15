@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/Debian) (preloaded format=pdflatex 2021.8.11)  5 SEP 2021 17:08
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/Debian) (preloaded format=pdflatex 2021.8.11)  14 OCT 2021 21:24
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -480,7 +480,306 @@ Package: varwidth 2009/03/30 ver 0.92;  Variable-width minipages
 \@vwid@loff=\dimen276
 \@vwid@roff=\dimen277
 ))
-(/usr/share/texlive/texmf-dist/tex/latex/subfig/subfig.sty
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/biblatex.sty
+Package: biblatex 2020/12/31 v3.16 programmable bibliographies (PK/MW)
+
+(/usr/share/texlive/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty
+Package: pdftexcmds 2020-06-27 v0.33 Utility functions of pdfTeX for LuaTeX (HO
+)
+
+(/usr/share/texlive/texmf-dist/tex/generic/infwarerr/infwarerr.sty
+Package: infwarerr 2019/12/03 v1.5 Providing info/warning/error messages (HO)
+)
+(/usr/share/texlive/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty
+Package: ltxcmds 2020-05-10 v1.25 LaTeX kernel commands for general use (HO)
+)
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+)
+(/usr/share/texlive/texmf-dist/tex/latex/etoolbox/etoolbox.sty
+Package: etoolbox 2020/10/05 v2.5k e-TeX tools for LaTeX (JAW)
+\etb@tempcnta=\count290
+)
+(/usr/share/texlive/texmf-dist/tex/latex/kvoptions/kvoptions.sty
+Package: kvoptions 2020-10-07 v3.14 Key value format for package options (HO)
+
+(/usr/share/texlive/texmf-dist/tex/generic/kvsetkeys/kvsetkeys.sty
+Package: kvsetkeys 2019/12/15 v1.18 Key value parser (HO)
+))
+(/usr/share/texlive/texmf-dist/tex/latex/logreq/logreq.sty
+Package: logreq 2010/08/04 v1.0 xml request logger
+\lrq@indent=\count291
+
+(/usr/share/texlive/texmf-dist/tex/latex/logreq/logreq.def
+File: logreq.def 2010/08/04 v1.0 logreq spec v1.0
+))
+(/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty
+Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
+)
+(/usr/share/texlive/texmf-dist/tex/latex/url/url.sty
+\Urlmuskip=\muskip17
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
+)
+\c@tabx@nest=\count292
+\c@listtotal=\count293
+\c@listcount=\count294
+\c@liststart=\count295
+\c@liststop=\count296
+\c@citecount=\count297
+\c@citetotal=\count298
+\c@multicitecount=\count299
+\c@multicitetotal=\count300
+\c@instcount=\count301
+\c@maxnames=\count302
+\c@minnames=\count303
+\c@maxitems=\count304
+\c@minitems=\count305
+\c@citecounter=\count306
+\c@maxcitecounter=\count307
+\c@savedcitecounter=\count308
+\c@uniquelist=\count309
+\c@uniquename=\count310
+\c@refsection=\count311
+\c@refsegment=\count312
+\c@maxextratitle=\count313
+\c@maxextratitleyear=\count314
+\c@maxextraname=\count315
+\c@maxextradate=\count316
+\c@maxextraalpha=\count317
+\c@abbrvpenalty=\count318
+\c@highnamepenalty=\count319
+\c@lownamepenalty=\count320
+\c@maxparens=\count321
+\c@parenlevel=\count322
+\blx@tempcnta=\count323
+\blx@tempcntb=\count324
+\blx@tempcntc=\count325
+\blx@maxsection=\count326
+\blx@maxsegment@0=\count327
+\blx@notetype=\count328
+\blx@parenlevel@text=\count329
+\blx@parenlevel@foot=\count330
+\blx@sectionciteorder@0=\count331
+\blx@entrysetcounter=\count332
+\blx@biblioinstance=\count333
+\labelnumberwidth=\skip52
+\labelalphawidth=\skip53
+\biblabelsep=\skip54
+\bibitemsep=\skip55
+\bibnamesep=\skip56
+\bibinitsep=\skip57
+\bibparsep=\skip58
+\bibhang=\skip59
+\blx@bcfin=\read3
+\blx@bcfout=\write4
+\blx@langwohyphens=\language5
+\c@mincomprange=\count334
+\c@maxcomprange=\count335
+\c@mincompwidth=\count336
+Package biblatex Info: Trying to load biblatex default data model...
+Package biblatex Info: ... file 'blx-dm.def' found.
+
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/blx-dm.def
+File: blx-dm.def 2020/12/31 v3.16 biblatex localization (PK/MW)
+)
+Package biblatex Info: Trying to load biblatex custom data model...
+Package biblatex Info: ... file 'biblatex-dm.cfg' not found.
+\c@afterword=\count337
+\c@savedafterword=\count338
+\c@annotator=\count339
+\c@savedannotator=\count340
+\c@author=\count341
+\c@savedauthor=\count342
+\c@bookauthor=\count343
+\c@savedbookauthor=\count344
+\c@commentator=\count345
+\c@savedcommentator=\count346
+\c@editor=\count347
+\c@savededitor=\count348
+\c@editora=\count349
+\c@savededitora=\count350
+\c@editorb=\count351
+\c@savededitorb=\count352
+\c@editorc=\count353
+\c@savededitorc=\count354
+\c@foreword=\count355
+\c@savedforeword=\count356
+\c@holder=\count357
+\c@savedholder=\count358
+\c@introduction=\count359
+\c@savedintroduction=\count360
+\c@namea=\count361
+\c@savednamea=\count362
+\c@nameb=\count363
+\c@savednameb=\count364
+\c@namec=\count365
+\c@savednamec=\count366
+\c@translator=\count367
+\c@savedtranslator=\count368
+\c@shortauthor=\count369
+\c@savedshortauthor=\count370
+\c@shorteditor=\count371
+\c@savedshorteditor=\count372
+\c@labelname=\count373
+\c@savedlabelname=\count374
+\c@institution=\count375
+\c@savedinstitution=\count376
+\c@lista=\count377
+\c@savedlista=\count378
+\c@listb=\count379
+\c@savedlistb=\count380
+\c@listc=\count381
+\c@savedlistc=\count382
+\c@listd=\count383
+\c@savedlistd=\count384
+\c@liste=\count385
+\c@savedliste=\count386
+\c@listf=\count387
+\c@savedlistf=\count388
+\c@location=\count389
+\c@savedlocation=\count390
+\c@organization=\count391
+\c@savedorganization=\count392
+\c@origlocation=\count393
+\c@savedoriglocation=\count394
+\c@origpublisher=\count395
+\c@savedorigpublisher=\count396
+\c@publisher=\count397
+\c@savedpublisher=\count398
+\c@language=\count399
+\c@savedlanguage=\count400
+\c@origlanguage=\count401
+\c@savedoriglanguage=\count402
+\c@pageref=\count403
+\c@savedpageref=\count404
+\shorthandwidth=\skip60
+\shortjournalwidth=\skip61
+\shortserieswidth=\skip62
+\shorttitlewidth=\skip63
+\shortauthorwidth=\skip64
+\shorteditorwidth=\skip65
+\locallabelnumberwidth=\skip66
+\locallabelalphawidth=\skip67
+\localshorthandwidth=\skip68
+\localshortjournalwidth=\skip69
+\localshortserieswidth=\skip70
+\localshorttitlewidth=\skip71
+\localshortauthorwidth=\skip72
+\localshorteditorwidth=\skip73
+Package biblatex Info: Trying to load compatibility code...
+Package biblatex Info: ... file 'blx-compat.def' found.
+
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/blx-compat.def
+File: blx-compat.def 2020/12/31 v3.16 biblatex compatibility (PK/MW)
+)
+Package biblatex Info: Trying to load generic definitions...
+Package biblatex Info: ... file 'biblatex.def' found.
+
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/biblatex.def
+File: biblatex.def 2020/12/31 v3.16 biblatex compatibility (PK/MW)
+\c@textcitecount=\count405
+\c@textcitetotal=\count406
+\c@textcitemaxnames=\count407
+\c@biburlbigbreakpenalty=\count408
+\c@biburlbreakpenalty=\count409
+\c@biburlnumpenalty=\count410
+\c@biburlucpenalty=\count411
+\c@biburllcpenalty=\count412
+\biburlbigskip=\muskip18
+\biburlnumskip=\muskip19
+\biburlucskip=\muskip20
+\biburllcskip=\muskip21
+\c@smartand=\count413
+)
+Package biblatex Info: Trying to load bibliography style 'numeric'...
+Package biblatex Info: ... file 'numeric.bbx' found.
+
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/bbx/numeric.bbx
+File: numeric.bbx 2020/12/31 v3.16 biblatex bibliography style (PK/MW)
+Package biblatex Info: Trying to load bibliography style 'standard'...
+Package biblatex Info: ... file 'standard.bbx' found.
+
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/bbx/standard.bbx
+File: standard.bbx 2020/12/31 v3.16 biblatex bibliography style (PK/MW)
+\c@bbx:relatedcount=\count414
+\c@bbx:relatedtotal=\count415
+))
+Package biblatex Info: Trying to load citation style 'numeric'...
+Package biblatex Info: ... file 'numeric.cbx' found.
+
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/cbx/numeric.cbx
+File: numeric.cbx 2020/12/31 v3.16 biblatex citation style (PK/MW)
+Package biblatex Info: Redefining '\cite'.
+Package biblatex Info: Redefining '\parencite'.
+Package biblatex Info: Redefining '\footcite'.
+Package biblatex Info: Redefining '\footcitetext'.
+Package biblatex Info: Redefining '\smartcite'.
+Package biblatex Info: Redefining '\supercite'.
+Package biblatex Info: Redefining '\textcite'.
+Package biblatex Info: Redefining '\textcites'.
+Package biblatex Info: Redefining '\cites'.
+Package biblatex Info: Redefining '\parencites'.
+Package biblatex Info: Redefining '\smartcites'.
+)
+Package biblatex Info: Trying to load configuration file...
+Package biblatex Info: ... file 'biblatex.cfg' found.
+
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/biblatex.cfg
+File: biblatex.cfg 
+))
+(/usr/share/texlive/texmf-dist/tex/latex/natbib/natbib.sty
+Package: natbib 2010/09/13 8.31b (PWD, AO)
+
+
+! LaTeX Error: Command \bibhang already defined.
+               Or name \end... illegal, see p.192 of the manual.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.637 \newlength{\bibhang}
+                          
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+\bibsep=\skip74
+LaTeX Info: Redefining \cite on input line 694.
+LaTeX Info: Redefining \citeauthor on input line 712.
+LaTeX Info: Redefining \Citeauthor on input line 731.
+LaTeX Info: Redefining \citeyear on input line 735.
+
+! LaTeX Error: Command \NAT@parse already defined.
+               Or name \end... illegal, see p.192 of the manual.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.773 }
+       %
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! LaTeX Error: Command \citename already defined.
+               Or name \end... illegal, see p.192 of the manual.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1028 \newcommand\citename{}
+                             
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+\c@NAT@ctr=\count416
+) (/usr/share/texlive/texmf-dist/tex/latex/subfig/subfig.sty
 Package: subfig 2005/06/28 ver: 1.3 subfig package
 
 (/usr/share/texlive/texmf-dist/tex/latex/caption/caption.sty
@@ -497,43 +796,26 @@ Package: caption3 2020/10/21 v2.2e caption3 kernel (AR)
 \caption@hangindent=\dimen284
 Package caption Info: Standard document class detected.
 )
-\c@caption@flags=\count290
-\c@continuedfloat=\count291
+\c@caption@flags=\count417
+\c@continuedfloat=\count418
 )
-\c@KVtest=\count292
-\sf@farskip=\skip52
+\c@KVtest=\count419
+\sf@farskip=\skip75
 \sf@captopadj=\dimen285
-\sf@capskip=\skip53
-\sf@nearskip=\skip54
-\c@subfigure=\count293
-\c@subfigure@save=\count294
-\c@lofdepth=\count295
-\c@subtable=\count296
-\c@subtable@save=\count297
-\c@lotdepth=\count298
-\sf@top=\skip55
-\sf@bottom=\skip56
+\sf@capskip=\skip76
+\sf@nearskip=\skip77
+\c@subfigure=\count420
+\c@subfigure@save=\count421
+\c@lofdepth=\count422
+\c@subtable=\count423
+\c@subtable@save=\count424
+\c@lotdepth=\count425
+\sf@top=\skip78
+\sf@bottom=\skip79
 )
 (/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty
 Package: hyperref 2020-05-15 v7.00e Hypertext links for LaTeX
 
-(/usr/share/texlive/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty
-Package: ltxcmds 2020-05-10 v1.25 LaTeX kernel commands for general use (HO)
-)
-(/usr/share/texlive/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty
-Package: pdftexcmds 2020-06-27 v0.33 Utility functions of pdfTeX for LuaTeX (HO
-)
-
-(/usr/share/texlive/texmf-dist/tex/generic/infwarerr/infwarerr.sty
-Package: infwarerr 2019/12/03 v1.5 Providing info/warning/error messages (HO)
-)
-Package pdftexcmds Info: \pdf@primitive is available.
-Package pdftexcmds Info: \pdf@ifprimitive is available.
-Package pdftexcmds Info: \pdfdraftmode found.
-)
-(/usr/share/texlive/texmf-dist/tex/generic/kvsetkeys/kvsetkeys.sty
-Package: kvsetkeys 2019/12/15 v1.18 Key value parser (HO)
-)
 (/usr/share/texlive/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty
 Package: kvdefinekeys 2019-12-19 v1.6 Define keys (HO)
 )
@@ -549,12 +831,9 @@ Package: letltxmacro 2019/12/03 v1.6 Let assignment for LaTeX macros (HO)
 (/usr/share/texlive/texmf-dist/tex/latex/auxhook/auxhook.sty
 Package: auxhook 2019-12-17 v1.6 Hooks for auxiliary files (HO)
 )
-(/usr/share/texlive/texmf-dist/tex/latex/kvoptions/kvoptions.sty
-Package: kvoptions 2020-10-07 v3.14 Key value format for package options (HO)
-)
 \@linkdim=\dimen286
-\Hy@linkcounter=\count299
-\Hy@pagecounter=\count300
+\Hy@linkcounter=\count426
+\Hy@pagecounter=\count427
 
 (/usr/share/texlive/texmf-dist/tex/latex/hyperref/pd1enc.def
 File: pd1enc.def 2020-05-15 v7.00e Hyperref: PDFDocEncoding definition (HO)
@@ -567,7 +846,7 @@ Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
 (/usr/share/texlive/texmf-dist/tex/generic/etexcmds/etexcmds.sty
 Package: etexcmds 2019/12/15 v1.7 Avoid name clashes with e-TeX commands (HO)
 )
-\Hy@SavedSpaceFactor=\count301
+\Hy@SavedSpaceFactor=\count428
 Package hyperref Info: Hyper figures OFF on input line 4464.
 Package hyperref Info: Link nesting OFF on input line 4469.
 Package hyperref Info: Hyper index ON on input line 4472.
@@ -575,12 +854,7 @@ Package hyperref Info: Plain pages OFF on input line 4479.
 Package hyperref Info: Backreferencing OFF on input line 4484.
 Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
 Package hyperref Info: Bookmarks ON on input line 4717.
-\c@Hy@tempcnt=\count302
-
-(/usr/share/texlive/texmf-dist/tex/latex/url/url.sty
-\Urlmuskip=\muskip17
-Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
-)
+\c@Hy@tempcnt=\count429
 LaTeX Info: Redefining \url on input line 5076.
 \XeTeXLinkMargin=\dimen287
 
@@ -591,7 +865,7 @@ Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
 Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO
 )
 ))
-\Fld@menulength=\count303
+\Fld@menulength=\count430
 \Field@Width=\dimen288
 \Fld@charsize=\dimen289
 Package hyperref Info: Hyper figures OFF on input line 6347.
@@ -609,9 +883,9 @@ Package: atbegshi-ltx 2020/08/17 v1.0a Emulation of the original atbegshi packa
 ge
 with kernel methods
 )
-\Hy@abspage=\count304
-\c@Item=\count305
-\c@Hfootnote=\count306
+\Hy@abspage=\count431
+\c@Item=\count432
+\c@Hfootnote=\count433
 )
 Package hyperref Info: Driver (autodetected): hpdftex.
 
@@ -623,8 +897,8 @@ Package: atveryend-ltx 2020/08/19 v1.0a Emulation of the original atvery packag
 e
 with kernel methods
 )
-\Fld@listcount=\count307
-\c@bookmark@seq@number=\count308
+\Fld@listcount=\count434
+\c@bookmark@seq@number=\count435
 
 (/usr/share/texlive/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
 Package: rerunfilecheck 2019/12/05 v1.9 Rerun checks for auxiliary files (HO)
@@ -635,13 +909,13 @@ Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
 Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 86.
 )
-\Hy@SectionHShift=\skip57
+\Hy@SectionHShift=\skip80
 )
-Package hyperref Info: Option `colorlinks' set `true' on input line 17.
+Package hyperref Info: Option `colorlinks' set `true' on input line 19.
 
 (/usr/share/texlive/texmf-dist/tex/latex/float/float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
-\c@float@type=\count309
+\c@float@type=\count436
 \float@exts=\toks36
 \float@box=\box62
 \@float@everytoks=\toks37
@@ -649,43 +923,56 @@ Package: float 2001/11/08 v1.3d Float enhancements (AL)
 )
 \@float@every@table=\toks38
 
+
+! Package biblatex Error: Incompatible package 'natbib'.
+
+See the biblatex package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.27 \begin{document}
+                     
+The 'natbib' package and biblatex are incompatible.
+
+\@quotelevel=\count437
+\@quotereset=\count438
 (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2020-01-29 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count310
+\l__color_backend_stack_int=\count439
 \l__pdf_internal_box=\box64
 )
 (./thesis.aux)
 \openout1 = `thesis.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 25.
-LaTeX Font Info:    ... okay on input line 25.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 25.
-LaTeX Font Info:    ... okay on input line 25.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 25.
-LaTeX Font Info:    ... okay on input line 25.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 25.
-LaTeX Font Info:    ... okay on input line 25.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 25.
-LaTeX Font Info:    ... okay on input line 25.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 25.
-LaTeX Font Info:    ... okay on input line 25.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 25.
-LaTeX Font Info:    ... okay on input line 25.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 25.
-LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
 
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count311
+\scratchcounter=\count440
 \scratchdimen=\dimen290
 \scratchbox=\box65
-\nofMPsegments=\count312
-\nofMParguments=\count313
+\nofMPsegments=\count441
+\nofMParguments=\count442
 \everyMPshowfont=\toks39
-\MPscratchCnt=\count314
+\MPscratchCnt=\count443
 \MPscratchDim=\dimen291
-\MPnumerator=\count315
-\makeMPintoPDFobject=\count316
+\MPnumerator=\count444
+\makeMPintoPDFobject=\count445
 \everyMPtoPDFconversion=\toks40
 ) (/usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
@@ -730,12 +1017,45 @@ e
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
+Package biblatex Info: Trying to load language 'english'...
+Package biblatex Info: ... file 'english.lbx' found.
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/lbx/english.lbx
+File: english.lbx 2020/12/31 v3.16 biblatex localization (PK/MW)
+)
+Package biblatex Info: Input encoding 'utf8' detected.
+Package biblatex Info: Automatic encoding selection.
+(biblatex)             Assuming data encoding 'utf8'.
+Package biblatex Info: Document encoding is UTF8 ....
+
+(/usr/share/texlive/texmf-dist/tex/latex/l3kernel/expl3.sty
+Package: expl3 2021-01-09 L3 programming layer (loader) 
+)
+Package biblatex Info: ... and expl3
+(biblatex)             2021-01-09 L3 programming layer (loader) 
+(biblatex)             is new enough (at least 2020/04/06),
+(biblatex)             setting 'casechanger=expl3'.
+
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/blx-case-expl3.sty
+(/usr/share/texlive/texmf-dist/tex/latex/l3packages/xparse/xparse.sty
+Package: xparse 2020-10-27 L3 Experimental document command parser
+
+(/usr/share/texlive/texmf-dist/tex/latex/l3packages/xparse/xparse-generic.tex))
+Package: blx-case-expl3 2020/12/31 v3.16 expl3 case changing code for biblatex
+)
+\openout4 = `thesis.bcf'.
+
+Package biblatex Info: Trying to load bibliographic data...
+Package biblatex Info: ... file 'thesis.bbl' not found.
+
+No file thesis.bbl.
+Package biblatex Info: Reference section=0 on input line 27.
+Package biblatex Info: Reference segment=0 on input line 27.
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: subfig package v1.3 is loaded.
 Package caption Info: float package is loaded.
 Package caption Info: hyperref package is loaded.
 Package caption Info: End \AtBeginDocument code.
-Package hyperref Info: Link coloring ON on input line 25.
+Package hyperref Info: Link coloring ON on input line 27.
 (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2019/09/16 v2.46 Cross-referencing by name of section
 
@@ -745,23 +1065,23 @@ Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
 (/usr/share/texlive/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty
 Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
-\c@section@level=\count317
+\c@section@level=\count446
 )
-LaTeX Info: Redefining \ref on input line 25.
-LaTeX Info: Redefining \pageref on input line 25.
-LaTeX Info: Redefining \nameref on input line 25.
+LaTeX Info: Redefining \ref on input line 27.
+LaTeX Info: Redefining \pageref on input line 27.
+LaTeX Info: Redefining \nameref on input line 27.
 
 (./thesis.out) (./thesis.out)
-\@outlinefile=\write4
-\openout4 = `thesis.out'.
+\@outlinefile=\write5
+\openout5 = `thesis.out'.
 
-LaTeX Font Info:    Trying to load font information for U+msa on input line 27.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 29.
 
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 27.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 29.
 
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
@@ -770,61 +1090,88 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 <peceptron.png, id=79, 611.28375pt x 402.50375pt>
 File: peceptron.png Graphic file (type png)
 <use peceptron.png>
-Package pdftex.def Info: peceptron.png  used on input line 36.
+Package pdftex.def Info: peceptron.png  used on input line 39.
 (pdftex.def)             Requested size: 305.64113pt x 201.25137pt.
 <nn.jpg, id=83, 132.9768pt x 111.7776pt>
 File: nn.jpg Graphic file (type jpg)
 <use nn.jpg>
-Package pdftex.def Info: nn.jpg  used on input line 46.
+Package pdftex.def Info: nn.jpg  used on input line 49.
 (pdftex.def)             Requested size: 265.95294pt x 223.55463pt.
 <mesh.png, id=85, 1744.5175pt x 828.09375pt>
 File: mesh.png Graphic file (type png)
 <use mesh.png>
-Package pdftex.def Info: mesh.png  used on input line 55.
-(pdftex.def)             Requested size: 523.3593pt x 248.43004pt.
-
-Overfull \hbox (10.24185pt too wide) in paragraph at lines 55--56
-[][] 
- []
-
-[1
+Package pdftex.def Info: mesh.png  used on input line 58.
+(pdftex.def)             Requested size: 348.89732pt x 165.61581pt.
+ [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./peceptron.png> <./nn.jpg
->] [2 <./mesh.png>] [3] (./thesis.aux)
+>] [2 <./mesh.png>]
 
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+Package natbib Warning: Citation `fma dataset' on page 3 undefined on input lin
+e 150.
 
 
-Package rerunfilecheck Warning: File `thesis.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
+! LaTeX Error: Can be used only in preamble.
 
-Package rerunfilecheck Info: Checksums for `thesis.out':
-(rerunfilecheck)             Before: 84704DE0613A8E7C034AEB3EAA95D172;1118
-(rerunfilecheck)             After:  6BDD86CFF029D764579009B1BC6CF67E;1118.
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.163 \bibliography
+                   {References}
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+LaTeX Warning: Empty bibliography on input line 164.
+
+
+LaTeX Warning: File `References.bib' already exists on the system.
+               Not generating it from this source.
+
+
+Package natbib Warning: There were undefined citations.
+
+[3] (./thesis.aux)
+
+LaTeX Warning: There were undefined references.
+
+Package rerunfilecheck Info: File `thesis.out' has not changed.
+(rerunfilecheck)             Checksum: DB3B04E909B753EA1E9C67A341CBEC5B;1116.
+
+Package biblatex Warning: Please (re)run Biber on the file:
+(biblatex)                thesis
+(biblatex)                and rerun LaTeX afterwards.
+
+Package logreq Info: Writing requests to 'thesis.run.xml'.
+\openout1 = `thesis.run.xml'.
+
  ) 
 Here is how much of TeX's memory you used:
- 19599 strings out of 481209
- 365261 string characters out of 5914747
- 658421 words of memory out of 5000000
- 36137 multiletter control sequences out of 15000+600000
- 410340 words of font info for 54 fonts, out of 8000000 for 9000
+ 26869 strings out of 481209
+ 506132 string characters out of 5914747
+ 1225901 words of memory out of 5000000
+ 43342 multiletter control sequences out of 15000+600000
+ 410648 words of font info for 55 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 113i,16n,133p,525b,420s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></us
-r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/shar
-e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texl
-ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/tex
-mf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist
-/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/
-type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
-ublic/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/am
-sfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
-/cm/cmsy7.pfb>
-Output written on thesis.pdf (3 pages, 588692 bytes).
+ 113i,16n,133p,739b,806s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
+r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
+e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texl
+ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/te
+xmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dis
+t/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts
+/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/
+public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
+amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
+/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
+sy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm
+10.pfb>
+Output written on thesis.pdf (3 pages, 604688 bytes).
 PDF statistics:
- 163 PDF objects out of 1000 (max. 8388607)
- 141 compressed objects within 2 object streams
+ 171 PDF objects out of 1000 (max. 8388607)
+ 147 compressed objects within 2 object streams
  32 named destinations out of 1000 (max. 500000)
  172 words of extra memory for PDF output out of 10000 (max. 10000000)
 

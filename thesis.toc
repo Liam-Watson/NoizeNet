@@ -1,0 +1,53 @@
+\boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax 
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {1}Abstract}{1}{section.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {2}Intorduction to Neural networks}{1}{section.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.1}Perceptrons}{1}{subsection.2.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.2}Multi layer peceptrons}{2}{subsection.2.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.3}Gradient decent}{2}{subsection.2.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.4}Activation functions}{3}{subsection.2.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.5}Feed forward}{4}{subsection.2.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.6}Error functions}{4}{subsection.2.6}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.7}Back propigation}{4}{subsection.2.7}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3}Intorduction to Recurrant Neural Networks}{4}{section.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.1}RNN concepts}{4}{subsection.3.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.2}LSTM}{5}{subsection.3.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {3.2.1}The Learn Gate}{5}{subsubsection.3.2.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {3.2.2}The Forget Gate}{5}{subsubsection.3.2.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {3.2.3}The Remember Gate}{5}{subsubsection.3.2.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {3.2.4}The Use Gate}{5}{subsubsection.3.2.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {4}Noize net}{6}{section.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.1}Data and preprocessing}{6}{subsection.4.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {4.1.1}Digital Music}{6}{subsubsection.4.1.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {4.1.2}An introduction to digital sound representations}{6}{subsubsection.4.1.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.2}Architecture}{7}{subsection.4.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.3}Implimentation}{7}{subsection.4.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.4}Results}{7}{subsection.4.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.5}Conclusion}{7}{subsection.4.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {5}References}{7}{section.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{References}{7}{section*.12}%

@@ -163,7 +163,7 @@
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>sortingtemplatename</bcf:key>
-      <bcf:value>nty</bcf:value>
+      <bcf:value>ynt</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>sortsets</bcf:key>
@@ -2341,11 +2341,37 @@
   <!-- CITATION DATA -->
   <!-- SECTION 0 -->
   <bcf:bibdata section="0">
+    <bcf:datasource type="file" datatype="bibtex" glob="false">references.bib</bcf:datasource>
   </bcf:bibdata>
   <bcf:section number="0">
+    <bcf:citekey order="1">Nielsen</bcf:citekey>
+    <bcf:citekey order="2">3blue1brown</bcf:citekey>
+    <bcf:citekey order="3">LSTM</bcf:citekey>
+    <bcf:citekey order="4">LSTM</bcf:citekey>
+    <bcf:citekey order="5">LSTM</bcf:citekey>
+    <bcf:citekey order="6">fma_dataset</bcf:citekey>
+    <bcf:citekey order="7">fma_challenge</bcf:citekey>
+    <bcf:citekey order="8">isoMP3</bcf:citekey>
+    <bcf:citekey order="9">mcfee2015librosa</bcf:citekey>
+    <bcf:citekey order="10">mcfee2015librosa</bcf:citekey>
+    <bcf:citekey order="11">vail_2013</bcf:citekey>
+    <bcf:citekey order="12">mcfee2015librosa</bcf:citekey>
+    <bcf:citekey order="13">mcfee2015librosa</bcf:citekey>
+    <bcf:citekey order="14">mcfee2015librosa</bcf:citekey>
+    <bcf:citekey order="15">mcfee2015librosa</bcf:citekey>
+    <bcf:citekey order="16">NEURIPS2019_9015</bcf:citekey>
+    <bcf:citekey order="17">mcfee2015librosa</bcf:citekey>
+    <bcf:citekey order="18">Hunter:2007</bcf:citekey>
+    <bcf:citekey order="19">scikit-learn</bcf:citekey>
+    <bcf:citekey order="20">reback2020pandas</bcf:citekey>
+    <bcf:citekey order="21">mckinney-proc-scipy-2010</bcf:citekey>
+    <bcf:citekey order="22">mcfee2015librosa</bcf:citekey>
+    <bcf:citekey order="23">harris2020array</bcf:citekey>
+    <bcf:citekey order="24">fma_dataset</bcf:citekey>
+    <bcf:citekey order="25">fma_challenge</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
-  <bcf:sortingtemplate name="nty">
+  <bcf:sortingtemplate name="ynt">
     <bcf:sort order="1">
       <bcf:sortitem order="1">presort</bcf:sortitem>
     </bcf:sort>
@@ -2353,6 +2379,11 @@
       <bcf:sortitem order="1">sortkey</bcf:sortitem>
     </bcf:sort>
     <bcf:sort order="3">
+      <bcf:sortitem order="1">sortyear</bcf:sortitem>
+      <bcf:sortitem order="2">year</bcf:sortitem>
+      <bcf:sortitem literal="1" order="3">9999</bcf:sortitem>
+    </bcf:sort>
+    <bcf:sort order="4">
       <bcf:sortitem order="1">sortname</bcf:sortitem>
       <bcf:sortitem order="2">author</bcf:sortitem>
       <bcf:sortitem order="3">editor</bcf:sortitem>
@@ -2360,24 +2391,16 @@
       <bcf:sortitem order="5">sorttitle</bcf:sortitem>
       <bcf:sortitem order="6">title</bcf:sortitem>
     </bcf:sort>
-    <bcf:sort order="4">
+    <bcf:sort order="5">
       <bcf:sortitem order="1">sorttitle</bcf:sortitem>
       <bcf:sortitem order="2">title</bcf:sortitem>
-    </bcf:sort>
-    <bcf:sort order="5">
-      <bcf:sortitem order="1">sortyear</bcf:sortitem>
-      <bcf:sortitem order="2">year</bcf:sortitem>
-    </bcf:sort>
-    <bcf:sort order="6">
-      <bcf:sortitem order="1">volume</bcf:sortitem>
-      <bcf:sortitem literal="1" order="2">0</bcf:sortitem>
     </bcf:sort>
   </bcf:sortingtemplate>
   <!-- DATALISTS -->
   <bcf:datalist section="0"
-                name="nty/global//global/global"
+                name="ynt/global//global/global"
                 type="entry"
-                sortingtemplatename="nty"
+                sortingtemplatename="ynt"
                 sortingnamekeytemplatename="global"
                 labelprefix=""
                 uniquenametemplatename="global"

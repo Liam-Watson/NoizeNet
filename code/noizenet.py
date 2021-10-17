@@ -14,6 +14,7 @@ import sklearn as skl
 import pandas as pd
 import utils
 import librosa.display
+import noise
 
 
 # torch.autograd.detect_anomaly(True) #Check for errors and return a stack trace. (Used to debug nan loss)
@@ -86,7 +87,7 @@ class NoizeNet(nn.Module):
         output = self.fc(r_out)
 
         if self.LSTMBool:
-            return output, hidden, cn
+            return output, (hidden, cn)
         else:
             return output, hidden
         
@@ -159,7 +160,7 @@ def train(noizeNet, n_steps, AUDIO_DIR, genreTracks, LSTM ,step_size=1, duration
                     x_tensor, y_tensor = x_tensor.cuda(), y_tensor.cuda()
             
             if LSTM:
-                prediction, hidden, c0 = noizeNet(x_tensor, hidden, c0) #LSTM!
+                prediction, (hidden, c0) = noizeNet(x_tensor, (hidden, c0)) #LSTM!
             else:
                 # outputs from the rnn
                 prediction, hidden = noizeNet(x_tensor, hidden)
@@ -203,6 +204,14 @@ def train(noizeNet, n_steps, AUDIO_DIR, genreTracks, LSTM ,step_size=1, duration
     return noizeNet
 
 ###################################################################################################################
+def genPerlin(x):
+    tmp = []
+    for xx in x:
+        tmp.append(noise.pnoise1(xx))
+
+    return tmp
+
+
 def predict(noizeNet, genreTrack ,duration=1, n_steps=30, LSTMBool=False, predictDuration = 30):
     print("PREDICTING...")
     noizeNet.eval()
@@ -211,16 +220,19 @@ def predict(noizeNet, genreTrack ,duration=1, n_steps=30, LSTMBool=False, predic
         c0 = None
     filePath = utils.get_audio_path(AUDIO_DIR, genreTrack) #Get the actual path to the file from the id
     y, sr = lib.load(filePath, mono=True, duration = duration)
+    
     data = y
 
-    # data = np.random.normal(-1,1,y.shape)
-
+    #data = np.random.normal(-1,1,y.shape)
+    #data = genPerlin(np.linspace(0,1,y.size))
+    
     batch_size = (int)(duration*sr/n_steps)
     # number_of_steps = len(data)-batch_size
     number_of_steps = (sr*predictDuration) - batch_size
 
     music = []
-    next = data[batch_size]
+    next = data[-step_size:]
+    sf.write('/home/liam/Desktop/University/2021/MAM3040W/thesis/writeup/code/predictionSeed.wav', np.append(data, next), sr,format="WAV")
     fileData = data
     print("BATCH SIZE:", batch_size ,sep="\t")
     print("NUMBER OF STEPS:", number_of_steps , sep="\t")
@@ -241,10 +253,10 @@ def predict(noizeNet, genreTrack ,duration=1, n_steps=30, LSTMBool=False, predic
         if(train_on_gpu):
                 x_tensor = x_tensor.cuda()
 
-        prediction, hidden, c0 = noizeNet(x_tensor, hidden, c0)
+        prediction, (hidden, c0) = noizeNet(x_tensor, (hidden, c0))
         
-        music = np.append(music,(prediction.cpu().data.numpy().flatten())[-step_size])
-        next = prediction.cpu().data.numpy().flatten()[-step_size]
+        music = np.append(music,(prediction.cpu().data.numpy().flatten())[-step_size:])
+        next = prediction.cpu().data.numpy().flatten()[-step_size:]
         if(int((batch_i/number_of_steps)) % 100 == 0 and batch_i % 100 == 0):
             print("PROGRESS:\t", round(((batch_i)/number_of_steps)*100, 2), "%"  , sep="")
             print("Prediction dimensions:\t", prediction.cpu().size(), "\t" ,prediction.cpu().data.numpy().flatten().size, "\nMusic dimensions:\t", music.size ,sep="")
@@ -260,8 +272,8 @@ def predict(noizeNet, genreTrack ,duration=1, n_steps=30, LSTMBool=False, predic
 ###################################################################################################################
 
 def generateModelName(n_steps = 30, print_every = 5, step_size =  1, duration = 5, numberOfTracks = 1, clip = 5, LSTMBool=False, hidden_dim=50,n_layers=1):
-    return "n_steps="+ n_steps + "__" +"print_every="+ print_every + "__" +"step_size="+ step_size + "__" +"duration="+ duration + "__" +  \
-    "numberOfTracks="+ numberOfTracks + "__" +  "clip="+ clip + "__" +  "LSTMBool="+ LSTMBool + "hidden_dim="+ hidden_dim + "__" +"n_layers="+ n_layers +"__"+ "lr=" + lr + ".pt"
+    return "n_steps="+ str(n_steps) + "__" +"print_every="+ str(print_every) + "__" +"step_size="+ str(step_size) + "__" +"duration="+ str(duration) + "__" +  \
+    "numberOfTracks="+ str(numberOfTracks) + "__" +  "clip="+ str(clip) + "__" +  "LSTMBool="+ str(LSTMBool) + "hidden_dim="+ str(hidden_dim) + "__" +"n_layers="+ str(n_layers) +"__"+ "lr=" + str(lr) + ".pt"
 
 #####################################################################################################################
 
@@ -269,7 +281,7 @@ def generateModelName(n_steps = 30, print_every = 5, step_size =  1, duration = 
 # n_steps = 1
 input_size=1
 output_size=1
-hidden_dim=1
+hidden_dim=100
 n_layers=1
 LSTMBool = True
 # instantiate an RNN
@@ -295,7 +307,7 @@ genreTracks = list(tracks.loc[small & (genre1),('track', 'genre_top')].index)
 
 
 #Set if we want to train new model or load and predict with saved model
-TRAIN = True
+TRAIN = False
 
 n_steps = 10 #The number of full frame steps to be taken to complete training
 print_every = 5 
@@ -316,7 +328,7 @@ else:
     # instantiate an RNN
     noizeNet = NoizeNet(input_size, output_size, hidden_dim, n_layers, LSTMBool)
     # model = TheModelClass(*args, **kwargs)
-    noizeNet.load_state_dict(torch.load("/home/liam/Desktop/University/2021/MAM3040W/thesis/writeup/smallTrainingV1LSTM.pt"))
+    noizeNet.load_state_dict(torch.load("/home/liam/Desktop/University/2021/MAM3040W/thesis/writeup/n_steps=10__print_every=5__step_size=1000__duration=30__numberOfTracks=1__clip=1__LSTMBool=Truehidden_dim=100__n_layers=1__lr=0.001.pt"))
     predict(noizeNet, genreTracks[-1] ,duration=duration, n_steps=n_steps, LSTMBool=LSTMBool, predictDuration = predictDuration)
 
 #TODO This is how to plot

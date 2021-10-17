@@ -6,16 +6,19 @@
 \usepackage{geometry}
 \usepackage[makeroom]{cancel}
 \usepackage[export]{adjustbox}
-\usepackage[backend=biber]{biblatex}
-\usepackage{natbib}
+\usepackage[
+backend=biber,
+sorting=ynt
+]{biblatex}
+\addbibresource{references.bib}
 \DeclareMathOperator{\sech}{sech}
 \usepackage{subfig}
-\usepackage{hyperref}
+\usepackage[hidelinks]{hyperref}
 \hypersetup{
-    colorlinks=true,
-    linkcolor=blue,
-    filecolor=magenta,      
-    urlcolor=blue,
+    %colorlinks=true,
+    %linkcolor=blue,
+    %filecolor=magenta,      
+    %urlcolor=blue,
     }
 \usepackage{float}
 \restylefloat{table}
@@ -26,15 +29,16 @@
 \author{Liam Watson}
 \begin{document}
 \maketitle
+\tableofcontents
 \section{Abstract}
 Complete abstract at the end
 \section{Intorduction to Neural networks}
 \label{sec:intro}
-Before we procede to the more advanced recurant neural network let us begin with an abbrevated coveradge of neaural networks and the convepts underpining them. 
+Before we procede to the more advanced recurant neural network let us begin with an abbrevated coveradge of neaural networks and the convepts underpining them. \cite{Nielsen}
 \subsection{Perceptrons}
 \label{sec:peceptrons}
 The simplest unit of a neural network is, as the name suggests a neuron or more commonly a peceptron. In it's simplest form a peceptron recieves an input, performs some calculation and produces output.
-\begin{figure}[h]
+\begin{figure}[H]
 \caption{Peceptron showing N input variables, N weights and a bias}
 \includegraphics[scale=0.5]{peceptron.png}
 \end{figure}
@@ -43,11 +47,11 @@ More rigorously: Given some input $\{x_i\} \forall i\in \mathbb{Z^+}$ predict so
 \subsection{Multi layer peceptrons}
 \label{sec:mlp}
 Peceptrons, however, are not powerful in this form, rather we only begin to see the utility when we start connecting them together in a mesh much like neurons in the brain. In figure two we can see a depiction of this with weights represented as line thickness (\autoref{fig:mlp}).
-\begin{figure}[h]
+\begin{figure}[H]
 \caption{Image of a simple neural network archutecture with 8 inputs two hidden layers and four output neurons}
 \label{fig:mlp}
 \includegraphics[scale=2]{nn.jpg}
-\href{https://www.youtube.com/watch?v=aircAruvnKk&ab_channel=3Blue1Brown}{Sorce}
+\cite{3blue1brown}
 \end{figure}
 \subsection{Gradient decent}
 Now we need a way to determine the peceptron weights, for this we use Gradient decent. There are many adaptions of gardient descent that aim to optimize its computational performance or over come some issue with converging to a poory optimised solution such as Fast gradient methods or momentum adapted gradient descent. \\
@@ -69,6 +73,10 @@ f(x) =
  0 & \text{if } x \leq 0 \\
 \end{cases}
 \end{align*}
+\begin{figure}[H]
+\caption{A plot of the Heaviside step function}
+\includegraphics[scale=0.2]{heaviside.png}
+\end{figure}
 The binary step function is primarly used for true, falue classification where the result is not a probability but a certanty. Beyond this this activation function has limited use in modern neural networks, hoever it should be noted that it is very computationally efficient. 
 \item Rectified Linear Unit(ReLU)
 Definition: 
@@ -79,6 +87,10 @@ f(x) =
  x & \text{if } x > 0 \\
 \end{cases}
 \end{align*}
+\begin{figure}[H]
+\caption{A plot of the ReLu function}
+\includegraphics[scale=0.2]{relu.png}
+\end{figure}
 The ReLU Function finds much use dispite its simplicity mostly due to its computational efficiency when compared to the more complex activation functions. ReLU reduces the input domain to only non-negative numbers which can be useful in cases where one wishes to disregard such values. 
 \item Sigmoid
 Definition: 
@@ -140,51 +152,74 @@ When using neural networks for time series data prediction, some semblance of me
 
 \subsection{RNN concepts}
 \label{sec:RNNS}
-
+NB refactor this section
+RNNs are designed specifically to learn from sequences of data by passing the hidden state from one step in the sequence to the next step in the sequence, combined with the input. This gives RNNs the ability to predict sequences of values using knowledge of past state as well as current state. 
+\begin{figure}[H]
+\caption{RNN basic architecture}
+\label{fig:RNN}
+\includegraphics[scale=0.5]{RNN.png}
+\end{figure}
+RNNs performs well on sequential data, however, in large time scales the model is likely to suffer from poor long term memory due to repeated gradients deminishing exponentially in time, the so called vanashing gradients problem. An additional contributor to the standard RNNs poor long term memory is that after each RNN cell we pass data through an activation function, which over many repeated transformations can result in loss of the meaning of the original information in the data. 
 \subsection{LSTM}
 \label{sec:LSTM}
-
+Long short-term memory (LSTM) is an extension to the idea of an RNN in that sequential data can be predicted by passing the hidden state of LSTM cells forward in time, however, a more sophisticated design of each unit in an attempt to mitigate information loss due to repeated data transformations and the vanashing gradients problem. The overall architecture of the LSTM cell is displayed bellow and in the following sub sections I will break down what each piece of the cell does and why it is included. 
+\begin{figure}[H]
+\caption{LSTM cell \cite{LSTM}}
+\label{fig:RNN}
+\includegraphics[scale=0.4]{LSTM_cell.png}
+\end{figure}
+The above figure is complex, however, we can combine the operations into four distinct functional components ("Gates") namely: Learn, forget, remember, and use gates. Each of these four gates has a specific intended function, however, it is pertinent to note that with statistical models there is little rigorous reasoning to why their structure.
+\subsubsection{The Learn Gate} 
+\subsubsection{The Forget Gate} 
+\subsubsection{The Remember Gate} 
+\subsubsection{The Use Gate} 
+With the macro definition of the LSTM cell we can print the rigorous mathematical definition which is as follows \cite{LSTM}:
+\begin{align*}
+&i_t = \sigma\left(W_{ii}x_t + b_{ii} + W_{hi}h_{t-1} + b_{hi} \right) \\
+&f_t = \sigma\left(W_{if}x_t + b_{if} + W_{hf}h_{t-1} + b_{hf} \right) \\
+&g_t = \tanh\left(W_{ig}x_t + b_{ig} + W_{hg}h_{t-1} + b_{hg} \right) \\
+&o_t = \sigma\left(W_{io}x_t + b_{io} + W_{ho}h_{t-1} + b_{ho} \right) \\
+&c_t = f_t \odot c_{t-1} + i_t \odot g_t \\
+&h_t = o_t \odot \tanh(c_t)
+\end{align*}
+Where $\sigma$ is the sigmoid function, $\odot$ is the Hadamard product (element wise product), $c_t$ is the cell state at some time, $h_t$ is the hidden state at some time, $i_t$ is the input gate, $f_t$ is the output gate, $g_t$ the cell gate, $0_t$ is the output gate and $x_t$ is the input data at some time. $W_{jj}$ are the input weights and $b_{jj}$ is the input bias. 
 \section{Noize net}
 \label{sec:nn}
 \subsection{Data and preprocessing}
-The data used for training, validation and prediction is the free music \cite{fma dataset}
-
+The data used for training, validation and prediction is the free music archive which includes songs labelled with many usefull charatersistics, particularly interesting to us is genre.  \cite{fma_dataset}
+\cite{fma_challenge}
+\subsubsection{Digital Music}
+In this section I will briefly discuss why RNN's are a favourable model of choice for digital music generation. \\
+Sound is fundamentally a time series phenomenon, being the pressure of a medium in space. When we sample sound using a microphone, we record the voltage changes in an inductor that is actuated by the changing pressure of the air. These voltage values can then be scaled by some scaling function determined by a manufacturers testing. The output file can then be viewed as many amplitude values in some complex wave traveling in time. There is some complexity with compression formats such as the mp3 standard which are taken care of by the librosa library. \cite{isoMP3}
+\subsubsection{An introduction to digital sound representations}
+Now that it is clear how digital audio is stored, in this section I will briefly discuss the different representations of digital audio and why we use them. \\
+Firstly, follwoing from the above section on digital music we can see the sample view which is an intuitive plot showing the sample amplitude against time. These plots are useful to us for checking the quality of the data produced by our model as we can clearly see if there is any irractic non-music like data. This view, however, gives us little indication of the qualitative aspects of the music produced by a model. 
+\begin{figure}[H]
+\caption{Example spectrogram taken \cite{mcfee2015librosa}}
+\includegraphics[scale=0.5]{librosa-display-waveshow-1_01.png}
+\end{figure}
+The next representation to be aware of is the envelope view which shows the amplitudes as did the sample view, however, this view makes reading off qualitative aspects of the music simple. The envelope is often used by muscisions, who will often use the ASDR interpretation of each progression in the graph. \cite{vail_2013}
+\begin{figure}[H]
+\caption{Example spectrogram taken \cite{mcfee2015librosa}}
+\includegraphics[scale=0.5]{librosa-display-waveshow-1_00.png}
+\end{figure}
+The last audio representation we will use in this paper is the spectogram which is a heat map with frequency (logarithmic or linear) on the vertical axis, time on the horizontal axis and temperature representing volume. The spectogram is often used in scientific audio applications as it gives us a clear plot showing the distripution of frequency and volume which we can use to describe both qualitative and quantative aspects of the data produced by a model. 
+\begin{figure}[H]
+\caption{Example spectrogram taken \cite{mcfee2015librosa}}
+\includegraphics[scale=0.5]{librosa-display-specshow-1.png}
+\end{figure}
 \label{sec:data}
 
 \subsection{Architecture}
 \label{sec:arch}
 \subsection{Implimentation}
+The implimentation was completed in python with the PyTorch library for Neural Networks \cite{NEURIPS2019_9015}, librosa for audio I/O \cite{mcfee2015librosa}, Matplot lib for graphics rendering \cite{Hunter:2007}, scikit learn \cite{scikit-learn}, pandas \cite{reback2020pandas} \cite{mckinney-proc-scipy-2010}, librosa \cite{mcfee2015librosa} and numpy \cite{harris2020array} for data processing \cite{fma_dataset}\cite{fma_challenge}.
 \label{sec:impl}
 \subsection{Results}
 \label{sec:results}
 \subsection{Conclusion}
 \label{sec:conclusion}
 
-\bibliography{References}
+\section{References}
 \printbibliography[heading=bibintoc]
-\begin{filecontents}{References.bib}
-@inproceedings{fma dataset,
-  title = {{FMA}: A Dataset for Music Analysis},
-  author = {Defferrard, Micha\"el and Benzi, Kirell and Vandergheynst, Pierre and Bresson, Xavier},
-  booktitle = {18th International Society for Music Information Retrieval Conference (ISMIR)},
-  year = {2017},
-  archiveprefix = {arXiv},
-  eprint = {1612.01840},
-  url = {https://arxiv.org/abs/1612.01840},
-}
-\end{filecontents}
-
-@inproceedings{fma challenge,
-  title = {Learning to Recognize Musical Genre from Audio},
-  subtitle = {Challenge Overview},
-  author = {Defferrard, Micha\"el and Mohanty, Sharada P. and Carroll, Sean F. and Salath\'e, Marcel},
-  booktitle = {The 2018 Web Conference Companion},
-  year = {2018},
-  publisher = {ACM Press},
-  isbn = {9781450356404},
-  doi = {10.1145/3184558.3192310},
-  archiveprefix = {arXiv},
-  eprint = {1803.05337},
-  url = {https://arxiv.org/abs/1803.05337},
-}
 \end{document}

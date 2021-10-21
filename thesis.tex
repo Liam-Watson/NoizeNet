@@ -37,7 +37,7 @@ Complete abstract at the end
 Before we procede to the more advanced recurant neural network let us begin with an abbrevated coveradge of neaural networks and the convepts underpining them. \cite{Nielsen}
 \subsection{Perceptrons}
 \label{sec:peceptrons}
-The simplest unit of a neural network is, as the name suggests a neuron or more commonly a peceptron. In it's simplest form a peceptron recieves an input, performs some calculation and produces output.
+The simplest unit of a neural network is a peceptron. A perceptron is a very simple model that takes input $\{x_1, x_2, ... ,x_n\}$ along with some weights for each input $\{w_1, w_2, .., w_N\}$. The output is a binary step function centered at some value. \cite{Nielsen} We can adjust the center point of the step function using an additional input weight, the bias $b$ which can be seen in figure 1.
 \begin{figure}[H]
 \caption{Peceptron showing N input variables, N weights and a bias}
 \includegraphics[scale=0.5]{peceptron.png}
@@ -48,10 +48,10 @@ More rigorously: Given some input $\{x_i\} \forall i\in \mathbb{Z^+}$ predict so
 \label{sec:mlp}
 Peceptrons, however, are not powerful in this form, rather we only begin to see the utility when we start connecting them together in a mesh much like neurons in the brain. In figure two we can see a depiction of this with weights represented as line thickness (\autoref{fig:mlp}).
 \begin{figure}[H]
-\caption{Image of a simple neural network archutecture with 8 inputs two hidden layers and four output neurons}
+\caption{Image of a simple neural network archutecture with 8 inputs two hidden layers and four output neurons. Image reproduced from Ref.\cite{3blue1brown}}
 \label{fig:mlp}
 \includegraphics[scale=2]{nn.jpg}
-\cite{3blue1brown}
+
 \end{figure}
 \subsection{Gradient decent}
 Now we need a way to determine the peceptron weights, for this we use Gradient decent. There are many adaptions of gardient descent that aim to optimize its computational performance or over come some issue with converging to a poory optimised solution such as Fast gradient methods or momentum adapted gradient descent. \\
@@ -118,7 +118,7 @@ f(x) =
 \subsection{Feed forward}
 \label{sec:forward}
 NB: NEED TO WRITE MUCH MORE HERE
-During the feed forward stage of a network we will recieve input's at the input neurons and travel through all the network layer calculating sum's and activations until the algorithm reaches the output layer.
+During the feed forward stage of a network we will recieve input's at the input neurons and travel through all the network layer calculating sum's and activations until the algorithm reaches the output layer. This step is essentially the models prediction step.
 \subsection{Error functions}
 \label{sec:error}
 Once we have output from the model, we need a metric for the error between the output and ground truth, an error function. There are many error functions that appear in the litterature, however, their use is often highly application dependent. In the case of Noize net we are dealing with simple two dimensional time series data and as such the relevant error functions are elementary:
@@ -159,6 +159,11 @@ RNNs are designed specifically to learn from sequences of data by passing the hi
 \label{fig:RNN}
 \includegraphics[scale=0.5]{RNN.png}
 \end{figure}
+The more rigorous definition of an LSTM is as follows:
+\begin{align*}
+h_t = \tanh\left( W_{ih}x_t + b_{ih} + W_{hh}h_{t-1} + b_{hh}  \right)
+\end{align*}
+With $h_t$ being the hidden state at some time $t$ that is passed forward to the next recurrant unit at $t+1$. Then $W_{jj}$ is some weight vector, $x_t$ the input vector and $b_{jj}$ some bias vector. In this paper we will exlusivly use $\tanh$ as the nonlinearity, however, it is common for the $ReLU$ function to be used. \\
 RNNs performs well on sequential data, however, in large time scales the model is likely to suffer from poor long term memory due to repeated gradients deminishing exponentially in time, the so called vanashing gradients problem. An additional contributor to the standard RNNs poor long term memory is that after each RNN cell we pass data through an activation function, which over many repeated transformations can result in loss of the meaning of the original information in the data. 
 \subsection{LSTM}
 \label{sec:LSTM}
@@ -173,7 +178,7 @@ The above figure is complex, however, we can combine the operations into four di
 \subsubsection{The Forget Gate} 
 \subsubsection{The Remember Gate} 
 \subsubsection{The Use Gate} 
-With the macro definition of the LSTM cell we can print the rigorous mathematical definition which is as follows \cite{LSTM}:
+With the macro definition of the LSTM cell we can print the rigorous mathematical definition which is as follows \cite{LSTM}\cite{sak_senior_beaufays_2014}:
 \begin{align*}
 &i_t = \sigma\left(W_{ii}x_t + b_{ii} + W_{hi}h_{t-1} + b_{hi} \right) \\
 &f_t = \sigma\left(W_{if}x_t + b_{if} + W_{hf}h_{t-1} + b_{hf} \right) \\
@@ -210,8 +215,9 @@ The last audio representation we will use in this paper is the spectogram which 
 \end{figure}
 \label{sec:data}
 
-\subsection{Architecture}
+\subsection{Architecture of NoiseNet}
 \label{sec:arch}
+Due to musics natural time dependence and periodicity it is only natural to develop some recurrant architecture. In this paper we will use a standard RNN as well as an LSTM. Both these models should produ
 \subsection{Implimentation}
 The implimentation was completed in python with the PyTorch library for Neural Networks \cite{NEURIPS2019_9015}, librosa for audio I/O \cite{mcfee2015librosa}, Matplot lib for graphics rendering \cite{Hunter:2007}, scikit learn \cite{scikit-learn}, pandas \cite{reback2020pandas} \cite{mckinney-proc-scipy-2010}, librosa \cite{mcfee2015librosa} and numpy \cite{harris2020array} for data processing \cite{fma_dataset}\cite{fma_challenge}.
 \label{sec:impl}

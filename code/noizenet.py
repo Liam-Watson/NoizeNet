@@ -148,10 +148,10 @@ def train(noizeNet, n_steps, AUDIO_DIR, genreTracks, LSTM ,step_size=1, duration
             x = data[:-1]
             y = data[1:]
             if(np.isnan(np.sum(x))):
-                print("NAN ON FILE:\t", filename, "XXX--------------------")
+                print("NAN ON FILE:\t", filename, "X")
                 break
             if(np.isnan(np.sum(y))):
-                print("NAN ON FILE:\t", filename, "YYY--------------------")
+                print("NAN ON FILE:\t", filename, "Y")
                 break
             # convert data into Tensors
             x_tensor = torch.Tensor(x).unsqueeze(0)  # unsqueeze gives a 1, batch_size dimension
@@ -231,18 +231,18 @@ def predict(noizeNet, genreTrack ,duration=1, n_steps=30, LSTMBool=False, predic
     number_of_steps = (sr*predictDuration) - batch_size
 
     music = []
-    next = data[-step_size:]
-    sf.write('/home/liam/Desktop/University/2021/MAM3040W/thesis/writeup/code/predictionSeed.wav', np.append(data, next), sr,format="WAV")
+    next = data[-1]
+    sf.write('/home/liam/Desktop/University/2021/MAM3040W/thesis/writeup/code/predictionSeed.wav', np.append( data[step_size: batch_size-step_size], next), sr,format="WAV")
     fileData = data
     print("BATCH SIZE:", batch_size ,sep="\t")
     print("NUMBER OF STEPS:", number_of_steps , sep="\t")
-    for batch_i in (range(0, number_of_steps, step_size)):
+    for batch_i in (range(0, number_of_steps)):
 
         if(train_on_gpu):
             noizeNet.cuda()
 
         # time_steps = np.linspace((int)(batch_i), (int)((batch_i + batch_size)), (int)(batch_size))
-        data = data[step_size: batch_size-step_size]
+        data = data[step_size: batch_size-1]
         data = np.append(data, next)
         data = np.resize(data,((batch_size), 1))
 
@@ -255,8 +255,8 @@ def predict(noizeNet, genreTrack ,duration=1, n_steps=30, LSTMBool=False, predic
 
         prediction, (hidden, c0) = noizeNet(x_tensor, (hidden, c0))
         
-        music = np.append(music,(prediction.cpu().data.numpy().flatten())[-step_size:])
-        next = prediction.cpu().data.numpy().flatten()[-step_size:]
+        music = np.append(music,(prediction.cpu().data.numpy().flatten())[-1])
+        next = prediction.cpu().data.numpy().flatten()[-1]
         if(int((batch_i/number_of_steps)) % 100 == 0 and batch_i % 100 == 0):
             print("PROGRESS:\t", round(((batch_i)/number_of_steps)*100, 2), "%"  , sep="")
             print("Prediction dimensions:\t", prediction.cpu().size(), "\t" ,prediction.cpu().data.numpy().flatten().size, "\nMusic dimensions:\t", music.size ,sep="")
@@ -281,8 +281,8 @@ def generateModelName(n_steps = 30, print_every = 5, step_size =  1, duration = 
 # n_steps = 1
 input_size=1
 output_size=1
-hidden_dim=100
-n_layers=1
+hidden_dim=512
+n_layers=2
 LSTMBool = True
 # instantiate an RNN
 noizeNet = NoizeNet(input_size, output_size, hidden_dim, n_layers, LSTMBool)
@@ -290,9 +290,9 @@ print(noizeNet)
 ######################################################################################################################
 
 # MSE loss and Adam optimizer with a learning rate of 0.01
-# criterion = nn.MSELoss()
-lr=0.001
-criterion = nn.L1Loss()
+criterion = nn.MSELoss()
+lr=0.01
+# criterion = nn.L1Loss()
 optimizer = torch.optim.Adam(noizeNet.parameters(), lr=lr)
 
 #Get metadata for fma dataset
@@ -312,9 +312,9 @@ TRAIN = False
 n_steps = 10 #The number of full frame steps to be taken to complete training
 print_every = 5 
 step_size =  1000 #The step size taken by each training frame 
-duration = 30 #The duration of the training segment
-predictDuration = 30 #The duration of the predicted song is seconds
-numberOfTracks = 1 #The number of tracks to be trained on
+duration = 15 #The duration of the training segment
+predictDuration = 5 #The duration of the predicted song is seconds
+numberOfTracks = 5 #The number of tracks to be trained on
 clip = 1 #Gradient clipping
 if TRAIN:
     print("TRAINING...")
@@ -328,7 +328,7 @@ else:
     # instantiate an RNN
     noizeNet = NoizeNet(input_size, output_size, hidden_dim, n_layers, LSTMBool)
     # model = TheModelClass(*args, **kwargs)
-    noizeNet.load_state_dict(torch.load("/home/liam/Desktop/University/2021/MAM3040W/thesis/writeup/n_steps=10__print_every=5__step_size=1000__duration=30__numberOfTracks=1__clip=1__LSTMBool=Truehidden_dim=100__n_layers=1__lr=0.001.pt"))
+    noizeNet.load_state_dict(torch.load("/home/liam/Desktop/University/2021/MAM3040W/thesis/writeup/n_steps=10__print_every=5__step_size=1000__duration=15__numberOfTracks=5__clip=1__LSTMBool=Truehidden_dim=512__n_layers=2__lr=0.01.pt"))
     predict(noizeNet, genreTracks[-1] ,duration=duration, n_steps=n_steps, LSTMBool=LSTMBool, predictDuration = predictDuration)
 
 #TODO This is how to plot

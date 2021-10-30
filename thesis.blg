@@ -1,21 +1,22 @@
 [0] Config.pm:311> INFO - This is Biber 2.16
 [0] Config.pm:314> INFO - Logfile is 'thesis.blg'
-[41] biber:340> INFO - === Thu Oct 21, 2021, 14:15:46
-[49] Biber.pm:415> INFO - Reading 'thesis.bcf'
-[92] Biber.pm:952> INFO - Found 15 citekeys in bib section 0
-[101] Biber.pm:4340> INFO - Processing section 0
-[108] Biber.pm:4531> INFO - Looking for bibtex format file 'references.bib' for section 0
-[109] bibtex.pm:1689> INFO - LaTeX decoding ...
-[118] bibtex.pm:1494> INFO - Found BibTeX data source 'references.bib'
-[134] Utils.pm:384> WARN - legacy month field 'December' in entry 'Nielsen' is not an integer - this will probably not sort properly.
-[137] Utils.pm:384> WARN - legacy month field 'October' in entry '3blue1brown' is not an integer - this will probably not sort properly.
-[143] Utils.pm:384> WARN - legacy month field 'Feb' in entry 'sak_senior_beaufays_2014' is not an integer - this will probably not sort properly.
-[161] Utils.pm:384> WARN - legacy month field 'Jun' in entry 'isoMP3' is not an integer - this will probably not sort properly.
-[226] Utils.pm:384> WARN - legacy month field 'sep' in entry 'harris2020array' is not an integer - this will probably not sort properly.
-[241] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[241] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[241] Biber.pm:4168> INFO - Sorting list 'ynt/global//global/global' of type 'entry' with template 'ynt' and locale 'en-US'
-[241] Biber.pm:4174> INFO - No sort tailoring available for locale 'en-US'
-[252] bbl.pm:654> INFO - Writing 'thesis.bbl' with encoding 'UTF-8'
-[266] bbl.pm:757> INFO - Output to thesis.bbl
-[266] Biber.pm:128> INFO - WARNINGS: 5
+[37] biber:340> INFO - === Sat Oct 30, 2021, 10:28:15
+[44] Biber.pm:415> INFO - Reading 'thesis.bcf'
+[80] Biber.pm:952> INFO - Found 16 citekeys in bib section 0
+[87] Biber.pm:4340> INFO - Processing section 0
+[92] Biber.pm:4531> INFO - Looking for bibtex format file 'references.bib' for section 0
+[93] bibtex.pm:1689> INFO - LaTeX decoding ...
+[101] bibtex.pm:1494> INFO - Found BibTeX data source 'references.bib'
+[115] Utils.pm:384> WARN - legacy month field 'December' in entry 'Nielsen' is not an integer - this will probably not sort properly.
+[117] Utils.pm:384> WARN - legacy month field 'October' in entry '3blue1brown' is not an integer - this will probably not sort properly.
+[123] Utils.pm:384> WARN - legacy month field 'Feb' in entry 'sak_senior_beaufays_2014' is not an integer - this will probably not sort properly.
+[139] Utils.pm:384> WARN - legacy month field 'Jun' in entry 'isoMP3' is not an integer - this will probably not sort properly.
+[194] Utils.pm:384> WARN - legacy month field 'sep' in entry 'harris2020array' is not an integer - this will probably not sort properly.
+[198] Utils.pm:384> WARN - legacy month field 'Feb' in entry 'zhang_he_sra_jadbabaie_2020' is not an integer - this will probably not sort properly.
+[210] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[210] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[210] Biber.pm:4168> INFO - Sorting list 'ynt/global//global/global' of type 'entry' with template 'ynt' and locale 'en-US'
+[210] Biber.pm:4174> INFO - No sort tailoring available for locale 'en-US'
+[220] bbl.pm:654> INFO - Writing 'thesis.bbl' with encoding 'UTF-8'
+[233] bbl.pm:757> INFO - Output to thesis.bbl
+[233] Biber.pm:128> INFO - WARNINGS: 6

@@ -885,6 +885,50 @@
       \verb https://doi.org/10.5281/zenodo.3509134
       \endverb
     \endentry
+    \entry{zhang_he_sra_jadbabaie_2020}{article}{}
+      \name{author}{4}{}{%
+        {{hash=854808860a9d7b07f59f160fcdd2643c}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Jingzhao},
+           giveni={J\bibinitperiod}}}%
+        {{hash=da1d01d5f3b429497ebd443f6ab849c1}{%
+           family={He},
+           familyi={H\bibinitperiod},
+           given={Tianxing},
+           giveni={T\bibinitperiod}}}%
+        {{hash=533357302a33eccdc40c943cd97d2edc}{%
+           family={Sra},
+           familyi={S\bibinitperiod},
+           given={Suvrit},
+           giveni={S\bibinitperiod}}}%
+        {{hash=9814576d57251b512116243e61b38a6e}{%
+           family={Jadbabaie},
+           familyi={J\bibinitperiod},
+           given={Ali},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{b610cc56db282d2cf606b9cdc14cb835}
+      \strng{fullhash}{774d38ef7ccaf8160896c3d6d5cf1aa5}
+      \strng{bibnamehash}{b610cc56db282d2cf606b9cdc14cb835}
+      \strng{authorbibnamehash}{b610cc56db282d2cf606b9cdc14cb835}
+      \strng{authornamehash}{b610cc56db282d2cf606b9cdc14cb835}
+      \strng{authorfullhash}{774d38ef7ccaf8160896c3d6d5cf1aa5}
+      \field{sortinit}{2}
+      \field{sortinithash}{ed39bb39cf854d5250e95b1c1f94f4ed}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv.org}
+      \field{month}{2}
+      \field{title}{Why gradient clipping accelerates training: A theoretical justification for adaptivity}
+      \field{year}{2020}
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/1905.11881
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/1905.11881
+      \endverb
+    \endentry
     \entry{isoMP3}{article}{}
       \field{sortinit}{2}
       \field{sortinithash}{ed39bb39cf854d5250e95b1c1f94f4ed}

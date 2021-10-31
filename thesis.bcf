@@ -2374,6 +2374,8 @@
     <bcf:citekey order="28">fma_dataset</bcf:citekey>
     <bcf:citekey order="29">fma_challenge</bcf:citekey>
     <bcf:citekey order="33">zhang_he_sra_jadbabaie_2020</bcf:citekey>
+    <bcf:citekey order="34">stanford</bcf:citekey>
+    <bcf:citekey order="35">stanford</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="ynt">

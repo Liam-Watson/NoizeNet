@@ -481,6 +481,34 @@
       \verb https://arxiv.org/abs/1803.05337
       \endverb
     \endentry
+    \entry{stanford}{article}{}
+      \name{author}{1}{}{%
+        {{hash=dc787e57b060aa09eb76c48469ecce4e}{%
+           family={Afshine\bibnamedelima Amidi},
+           familyi={A\bibinitperiod\bibinitdelim A\bibinitperiod},
+           given={Shervine\bibnamedelima Amidi},
+           giveni={S\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+      }
+      \strng{namehash}{dc787e57b060aa09eb76c48469ecce4e}
+      \strng{fullhash}{dc787e57b060aa09eb76c48469ecce4e}
+      \strng{bibnamehash}{dc787e57b060aa09eb76c48469ecce4e}
+      \strng{authorbibnamehash}{dc787e57b060aa09eb76c48469ecce4e}
+      \strng{authornamehash}{dc787e57b060aa09eb76c48469ecce4e}
+      \strng{authorfullhash}{dc787e57b060aa09eb76c48469ecce4e}
+      \field{sortinit}{2}
+      \field{sortinithash}{ed39bb39cf854d5250e95b1c1f94f4ed}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{6}
+      \field{title}{CS 230 - Deep Learning}
+      \field{year}{2019}
+      \verb{urlraw}
+      \verb https://stanford.edu/~shervine/teaching/cs-230/cheatsheet-recurrent-neural-networks#architecture
+      \endverb
+      \verb{url}
+      \verb https://stanford.edu/~shervine/teaching/cs-230/cheatsheet-recurrent-neural-networks#architecture
+      \endverb
+    \endentry
     \entry{Nielsen}{inproceedings}{}
       \name{author}{1}{}{%
         {{hash=3b32fb3a134f406f7b5107358d27befe}{%

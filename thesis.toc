@@ -4,19 +4,19 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {2}Introduction}{1}{section.2}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3}Intorduction to Neural networks}{1}{section.3}%
+\contentsline {section}{\numberline {3}Intorduction to Neural networks}{2}{section.3}%
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {3.1}Perceptrons}{2}{subsection.3.1}%
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {3.2}Multi layer peceptrons}{2}{subsection.3.2}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.3}Gradient decent}{2}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.3}Activation functions}{3}{subsection.3.3}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.4}Activation functions}{3}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.4}Feed forward}{4}{subsection.3.4}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.5}Feed forward}{4}{subsection.3.5}%
+\contentsline {subsection}{\numberline {3.5}Error functions (Loss functions)}{4}{subsection.3.5}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.6}Error functions}{4}{subsection.3.6}%
+\contentsline {subsection}{\numberline {3.6}Gradient decent}{5}{subsection.3.6}%
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {3.7}Back propigation}{5}{subsection.3.7}%
 \defcounter {refsection}{0}\relax 
@@ -24,7 +24,7 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {4.1}RNN concepts}{5}{subsection.4.1}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.2}LSTM}{5}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.2}LSTM}{6}{subsection.4.2}%
 \defcounter {refsection}{0}\relax 
 \contentsline {subsubsection}{\numberline {4.2.1}The Learn Gate (Input gate)}{6}{subsubsection.4.2.1}%
 \defcounter {refsection}{0}\relax 
@@ -34,38 +34,44 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsubsection}{\numberline {4.2.4}The Use Gate (The output gate) }{6}{subsubsection.4.2.4}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {5}Noize net}{6}{section.5}%
+\contentsline {section}{\numberline {5}Noize net}{7}{section.5}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {5.1}Data and preprocessing}{6}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.1}Data and preprocessing}{7}{subsection.5.1}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {5.1.1}Digital Music}{6}{subsubsection.5.1.1}%
+\contentsline {subsubsection}{\numberline {5.1.1}Digital Music}{7}{subsubsection.5.1.1}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {5.1.2}An introduction to digital sound representations}{6}{subsubsection.5.1.2}%
+\contentsline {subsubsection}{\numberline {5.1.2}An introduction to digital sound representations}{7}{subsubsection.5.1.2}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {5.1.3}Additional data representation}{7}{subsubsection.5.1.3}%
+\contentsline {subsubsection}{\numberline {5.1.3}Additional data representation}{8}{subsubsection.5.1.3}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {5.1.4}Data used for generation seed}{8}{subsubsection.5.1.4}%
+\contentsline {subsubsection}{\numberline {5.1.4}Data used for generation seed}{9}{subsubsection.5.1.4}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {5.1.5}Data scaling}{8}{subsubsection.5.1.5}%
+\contentsline {subsubsection}{\numberline {5.1.5}Data scaling}{9}{subsubsection.5.1.5}%
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {5.2}Architecture of NoiseNet}{9}{subsection.5.2}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {5.3}Implimentation}{9}{subsection.5.3}%
+\contentsline {subsection}{\numberline {5.3}Implimentation}{10}{subsection.5.3}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {5.3.1}Hyper-parameters}{9}{subsubsection.5.3.1}%
+\contentsline {subsubsection}{\numberline {5.3.1}Hyper-parameters}{10}{subsubsection.5.3.1}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {5.4}A note on numerical stability of the model}{10}{subsection.5.4}%
+\contentsline {subsection}{\numberline {5.4}A note on numerical stability of the model}{11}{subsection.5.4}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {5.4.1}A note on batching}{10}{subsubsection.5.4.1}%
+\contentsline {subsubsection}{\numberline {5.4.1}A note on batching}{11}{subsubsection.5.4.1}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {5.5}Results}{11}{subsection.5.5}%
+\contentsline {subsection}{\numberline {5.5}Results}{12}{subsection.5.5}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {5.5.1}Training and validation}{11}{subsubsection.5.5.1}%
+\contentsline {subsubsection}{\numberline {5.5.1}Training and validation}{12}{subsubsection.5.5.1}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {5.5.2}RNN and LSTM comparison}{13}{subsubsection.5.5.2}%
+\contentsline {subsubsection}{\numberline {5.5.2}Initial investigation}{14}{subsubsection.5.5.2}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {5.6}LSTM large training}{13}{subsection.5.6}%
+\contentsline {subsubsection}{\numberline {5.5.3}RNN and LSTM comparison}{15}{subsubsection.5.5.3}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {5.7}Conclusion}{13}{subsection.5.7}%
+\contentsline {subsection}{\numberline {5.6}Adressing prediction convergence}{15}{subsection.5.6}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {6}References}{13}{section.6}%
+\contentsline {subsection}{\numberline {5.7}Introducing artificial noise}{16}{subsection.5.7}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {5.7.1}Fourier Transform results}{16}{subsubsection.5.7.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {5.8}Conclusion}{17}{subsection.5.8}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {6}References}{17}{section.6}%

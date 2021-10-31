@@ -6,6 +6,8 @@
 \usepackage{geometry}
 \usepackage[makeroom]{cancel}
 \usepackage{ltablex}
+\usepackage{calrsfs}
+\DeclareMathAlphabet{\pazocal}{OMS}{zplm}{m}{n}
 \usepackage[export]{adjustbox}
 \usepackage[
 backend=biber,
@@ -41,30 +43,75 @@ In this paper we wish to investigate the feasibility of music generation using a
 Before we procede to the more advanced recurant neural network let us begin with an abbrevated coveradge of neaural networks and the convepts underpining them. 
 \subsection{Perceptrons}
 \label{sec:peceptrons}
-The simplest unit of a neural network is a peceptron. A perceptron is a very simple model that takes input $\{x_1, x_2, ... ,x_n\}$ along with some weights for each input $\{w_1, w_2, .., w_N\}$. The output is a binary step function centered at some value. \cite{Nielsen} We can adjust the center point of the step function using an additional input weight, the bias $b$ which can be seen in figure 1.
+The simplest unit of a neural network is a peceptron. A perceptron is a very simple model that takes input $\{x_1, x_2, ... ,x_n\}$ along with some weights for each input $\{w_1, w_2, .., w_N\}$. The output is a binary value determined by a step function centered at some value. \cite{Nielsen} We can adjust the center point of the step function using an additional input weight, the bias $b$ which can be seen in figure 1.
 \begin{figure}[H]
 \caption{Peceptron showing N input variables, N weights and a bias}
 \includegraphics[scale=0.5]{peceptron.png}
 \end{figure}
+The output of the peceptron is calculated by point wise multiplying the weights (and bais) with the inputs, then passing the sum of the result through the step function. Mathematically this can be represented as a dot prduct of two vectors. 
+\begin{align*}
+\sigma \left(\begin{bmatrix}
+&w_1 \\
+&w_2 \\
+&. \\
+&. \\
+&. \\
+&w_n \\
+&b \\
+\end{bmatrix} 
+\cdot 
+\begin{bmatrix}
+&x_1 \\
+&x_2 \\
+&. \\
+&. \\
+&. \\
+&x_n \\
+&1
+\end{bmatrix}\right) = \sigma \left(w\cdot x\right)
+\end{align*}
 Given these inputs and bias we can adjust weights and bais to satisfy our desired output after summation and activation function (\ref{sec:activationfuncs}). 
 More rigorously: Given some input $\{x_i\} \forall i\in \mathbb{Z^+}$ predict some $y=\sigma(W_i x_i)$ where $\sigma$ is the Heaviside step function. This model is only useful for very simple binary classification problems and has very little real world application in this form.
 \subsection{Multi layer peceptrons}
 \label{sec:mlp}
-We only begin to see the utility when we start connecting peceptrons together in a mesh much like neurons in the brain. In figure two we can see a depiction of this with weights represented as line thickness (\autoref{fig:mlp}). 
+We only begin to see the utility when we start connecting peceptrons together in a mesh much like neurons in the brain. In figure 2 we can see a depiction of this with weights represented as line thickness (\autoref{fig:mlp}). 
 \begin{figure}[H]
 \caption{Image of a simple neural network archutecture with 8 inputs two hidden layers and four output neurons. Image reproduced from Ref.\cite{3blue1brown}}
 \label{fig:mlp}
 \includegraphics[scale=2]{nn.jpg}
 \end{figure}
-\subsection{Gradient decent}
-\label{sec:gradientDecent}
-Now we need a way to determine the peceptron weights, for this we use Gradient decent. There are many adaptions of gardient descent that aim to optimize its computational performance or over come some issue with converging to a poory optimised solution such as Fast gradient methods or momentum adapted gradient descent. \\
-The aim of gradient descent is to itteratively optimize the peceptron weights to converge on a local minimum by taking steps in the direction of steepest descent, after many itterations we will find that the networks weights are well optimised for some goal. However we may find that a local minimum is not sufficient for our purposes and as such may need to employ some hyperparameter tuning such as changing the the step size we take or adding momentum in the hopes that we converge to a more optimal solution.
-\begin{figure}[H]
-\caption{A plot of $f(x,y) = \sin(x) + \sin(y)$ with a path showing gradient decent steps}
-\includegraphics[scale=0.2]{mesh.png}
-\end{figure}
+The mathematics here is similar to the single peceptron but, now the input values for any layer is determeind by the previous latyer. Mathematically this is readily represented as matrix vector multiplication. 
+\begin{align*}
+\sigma \left(\begin{bmatrix}
+&w_{1,1} &w_{1,2} &.&.&. &w_{1,n} \\
+&w_{2,1} &w_{2,2} &.&.&. &w_{2,n}  \\
+&.&.&.&.&.&. \\
+&. &.&.&.&.&.\\
+&. &.&.&.&.&.\\
+&w_{n,1} &w_{n,2} &.&.&. &w_{n,n}  \\
+\end{bmatrix} 
+\begin{bmatrix}
+&x_1 \\
+&x_2 \\
+&. \\
+&. \\
+&. \\
+&x_n \\
+\end{bmatrix}
++
+\begin{bmatrix}
+&b_1 \\
+&b_2 \\
+&. \\
+&. \\
+&. \\
+&b_n \\
+\end{bmatrix}
+\right) = \sigma \left(\textbf{W} \vec{x} + \vec{b}\right)
+\end{align*}
+Where the activation function is applied to each of the resulting vector elements. 
 \subsection{Activation functions}
+\label{sec:activationfuncs}
 Now we will discuss, much like with a biological neuron, how will a neuron decide to acivate or not. A binary step function is very limiting in terms of application to the real world, a continuous output would be far more useful for classicication probabilities or in our case of this work, music generation. There are many functions that are used in the literature but here we give give a quick overview of the most common functions and their uses. The purpose of an activation function is to format the output of a peceptron, we begin with the most elementary of these functions (excluding the identity function defined as $f(x) = x$. 
 \begin{enumerate}
 \item The binary step function \\
@@ -119,15 +166,12 @@ f(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}}
 \end{figure}
 \end{enumerate}
 
-\label{sec:activationfuncs}
-
 \subsection{Feed forward}
 \label{sec:forward}
-NB: NEED TO WRITE MUCH MORE HERE
-During the feed forward stage of a network we will recieve input's at the input neurons and travel through all the network layer calculating sum's and activations until the algorithm reaches the output layer. This step is essentially the models prediction step.
-\subsection{Error functions}
+Now we have covered how to calculate the activations of each neuron in the netowrk, we can now begin using the output. The output of the network is obtained during the feed forward stage of a network. The network will recieve input's at the input neurons and propagate through all the network layers calculating sum's and activations until the algorithm reaches the output layer. The activations at the output layer are considered the network prediction. One can see why the phase is called feed forward, as the network propagates activations "left to right", forward through the network. 
+\subsection{Error functions (Loss functions)}
 \label{sec:error}
-Once we have output from the model, we need a metric for the error between the output and ground truth, an error function. There are many error functions that appear in the litterature, however, their use is often highly application dependent. In the case of Noize net we are dealing with simple two dimensional time series data and as such the relevant error functions are elementary:
+Once we have output from the model, we need a metric for the error between the output prediction and ground truth, an error function. There are many error functions that appear in the litterature, however, their use is often highly application dependent. In the case of music generation we are dealing with simple two dimensional time series data and as such the relevant error functions are elementary:
 \begin{enumerate}
 \item Mean Square Error (MSE)\\
 This error function finds the averadge square difference between the predicted value and ground truth, defined as
@@ -147,6 +191,18 @@ If the appliction requires a signed error function the MBE error function could 
 MBE = \frac{\sum_{i=0}^N (y_i - y_i^\prime)}{N}
 \end{align*}
 \end{enumerate}
+It should be noted that more complex loss functions are used for categorical data such as cross entropy loss or hinge Loss.
+
+\subsection{Gradient decent}
+\label{sec:gradientDecent}
+Now we need a method to update the peceptron weights given some value for the error between some prediction and ground truth, for this we use gradient decent. There are many adaptions of gardient descent that aim to optimize its computational performance or over come some issue with converging to a poorly optimised solution such as fast gradient methods or momentum adapted gradient descent methods. \\
+The aim of gradient descent is to itteratively optimize the peceptron weights in order to converge on a minimum (likely a local minimum) by taking steps in the direction of steepest descent, after many itterations we will find that the networks weights are well optimised for some goal. However we may find that a local minimum is not sufficient for our purposes and as such may need to employ some hyperparameter tuning such as changing the the step size we take or adding momentum in the hopes that we converge to a more optimal solution.
+\begin{figure}[H]
+\centering
+\caption{A plot of $f(x,y) = \sin(x) + \sin(y)$ with a path showing gradient decent steps}
+\includegraphics[scale=0.2]{mesh.png}
+\end{figure}
+Mathematically gradient descent is a simple optimization problem. First we must define cost. The cost is defined by some error function as discussed above where in the context of a neural network we sum the "difference"(absolute, sequared or standard) between each of the output neurons and the ground truth value, then divide by the number of output neurons. So if we have some function that calculates the cost (a so called cost function $C$) we can calculate the gradient $\nabla C$ and take a step in the opposite direction $-\nabla C$ as we wish to find the minimum of the cost function. 
 \subsection{Back propigation}
 \label{sec:back}
 Back propigation is the learning step for a model. Once we have completed the feed forward step and calculated the error we need to travel back through the network and adjust the weights and biases in order to optimize the model. In order to update the weights and bais values we need to know by how much.  
@@ -315,10 +371,10 @@ Gradient Clipping value & The influence of gradient clipping on the model perfor
 During the implimentation of the RNNs there was significant numerical instability which is exhibited as NaN gradiients, loss and prediction. Once numerical instability occurs there is no way to recover the model. Numerical instability is not well covered in scientific litterature with only a few solutions being propsed. Numerical instability can be caused by many factors such as poor input data or choice of hyper parameters. In the litteratire common instabilities reffered to are exploding gradients and vanshing gradients. \\
 The solution to the numerical instabilities in this work were implimenting a gradient clipping scheme which prevents exploding gradients by provind an upper bound for gradient values. An additional parameter effecting the stability of the model was the learning rate, which should be sufficiently small to ensure stability. There is no rigporous means to determine a suitable value for these two stability affecting variables and so they should be determined experimentally. 
 \begin{figure}[H]
-\caption{Showing how gradient clipping prevents exploding gradients for some chosen clip value C}
+\caption{Showing how gradient clipping prevents exploding gradients for some chosen clip value C \cite{stanford}. }
 \includegraphics[scale=0.35]{gradient_clipping.png}
 \end{figure}
-
+Note that in the figure above the cost function is represented as $\pazocal{L}$
 
 \subsubsection{A note on batching}
 An important consequence of the volume of data is how the model will injest it. 
@@ -364,8 +420,31 @@ We can now verify that the model is learning generalisable knowledge. First let 
 \caption{Plot of loss over 100 epochs with 10 songs of 100 epochs each for LSTM}
 \includegraphics[scale=0.35]{loss_plot_10songs.png}
 \end{figure}
+After we have confirmend that the loss is decreasing as expected we need to ensure that the training is generalising to unseen data and confirm that we are not over fitting the model. To check both of these we can use a validation step during training, where periodically we give the model some unseen data as input and check the error of the prediction to the unseen data. Bellow we can see a figure showing that as the loss decreases so does the validation loss. If the model was overfit the validation loss should increase as training continues.
+\begin{figure}[H]
+\caption{Plot of loss over 100 epochs with 10 songs of 100 epochs each for LSTM}
+\includegraphics[scale=0.35]{loss_plot_10songs.png}
+\end{figure}
+\subsubsection{Initial investigation}
+Before we begin to ask our model to generate completely new music it is insightful to see if the network can reproduce music. If we train the model on raw muisic samples and proceed to feed it a music it has not been trained on as input we find the following output.
+\begin{figure}[H]
+\caption{Showing the reproduction of an unseen song by LSTM}
+\includegraphics[scale=0.35]{reproduce1.png}
+\end{figure}
+We can see in the wave plot that the output is relatively smooth on small time scales with few irratic jumps. However there is still some noise in the output music which can be seen by the ill defined envelope and spectrogram. 
+\begin{figure}[H]
+\caption{Showing the reproduction seed of an unseen song by LSTM}
+\includegraphics[scale=0.35]{reproductionSeed.png}
+\end{figure}
+It should be noted that although the reproduction is noisy, to the ear the music is definitely recognisable and qualitatively not unplesant. 
 \subsubsection{RNN and LSTM comparison}
-Here we will compare the performance of an RNN and LSTM model with the same hyperparameters where applicable. The parameters are listed in the table bellow\\
+Here we will compare the performance of an RNN and LSTM model with the same hyperparameters where applicable. 
+For a reproduction the RNN performs slightly worse than the LSTM with the same hyperparameters. The envelope and spectrogram in the figure bellow shows that the RNN reproduction contains more noise than the LSTM. Additionally, the wave plot shows that the RNN produces more erratic output that leads to a qualitatively poor listening experience. It should be noted, however, that the reproduction is still recognisable. 
+\begin{figure}[H]
+\caption{Showing the reproduction seed of an unseen song by RNN}
+\includegraphics[scale=0.35]{RNN_Reproduction.png}
+\end{figure}
+The parameters are listed in the table bellow\\
 \begin{tabularx}{0.8\textwidth} { 
   | >{\raggedright\arraybackslash}X 
   | >{\centering\arraybackslash}X 
@@ -394,32 +473,67 @@ Gradient Clipping value & 1 \\
 Dropout probability & 0.5 \\
 \hline
 \end{tabularx}
-\subsection{LSTM large training}
+After approximately 5 itterations of prediction both the RNN and LSTM converge to a single output value. After reasurching this problem thoroughly there appears to be no formal works discussing the topic, however, there has been some informal discussion which often leads to the following hypotheses.
+\begin{enumerate}
+\item Poor scaling of data
+\item Poor long term memory
+\item Poor quality input data
+\item Insufficient model training
+\item Insufficient hyper parameter optimization
+\item Insufficient model complexity
+\item Insufficient data type accuracy
+\item Insufficient training data
+\end{enumerate}
+\subsection{Adressing prediction convergence}
+In this section we will layout the different model and data tuning that was used to solve the prediction value convergence problem. In the table bellow I have layed of the change and the result of such a change. 
 \begin{tabularx}{0.8\textwidth} { 
   | >{\raggedright\arraybackslash}X 
-  | >{\centering\arraybackslash}X |}
+  | >{\centering\arraybackslash}X 
+  | >{\raggedleft\arraybackslash}X | }
  \hline
- hyper-parameter & Value \\
+ Change & Values attempted & Result \\
  \hline
- Hidden Layer Dimension  & 512 \\
+ Increasing the hidden layer dimension to address model complexity  & 10,50,256,512,1024 & Across all the values there was no change. 1024 was the limit of model size as we hit GPU memory limits   \\
 \hline
-LSTM Layers  & 2  \\
+ LSTM layers  & 1,2,10 & Prediction converges for all attempted values \\
 \hline
- Loss criterion  & MSE Loss \\
+ Loss criterion  & MSE Loss, MAE & Prediction converges for all attempted values  \\
 \hline
- Optimizer  & Adam Optimizer  \\
+ Optimizer  & Adam Optimizer, Stochastic gradient descent, ADADELTA (An Adaptive Learning Rate Method) &  Prediction converges for all attempted values \\
 \hline
- Learning rate  & 0.01  \\
+ Learning rate  & 1, 0.1, 0.001, 0.0001, 0.00001 & Prediction converges for all attempted values \\
 \hline
- Genre  & Instrumental\\
+ Number of songs to train on  & 1,5,100 & Prediction converges for all attempted values  \\
 \hline
- Number of songs to train on  & 5  \\
+ Duration of song to train on on  & 0.1, 1, 5, 10, 15 & Value converges more slowly for longer durations \\
 \hline
- Duration of song to train on on  & 15s   \\
+Gradient Clipping value & 0.001, 0.1, 1, 5 & Prediction converges for all attempted values\\
 \hline
-Gradient Clipping value & 1 \\
+Dropout probability & 0.5, 0.2 & Prediction converges for all attempted values \\
+\hline
+Data scaling method & min-max scaling, Z-score  & Prediction converges for all attempted values \\
+\hline
+Training Sequence length & 2205, 11025, 22050, 110250, 100 000  & Prediction converges for all attempted values \\
+\hline
+Step size& 2205, 11025, 22050, 110250, 100 000  & Prediction converges for all attempted values \\
+\hline
+Prediction seed length & 100, 1000, 22050, 100 000  & Prediction converges for all attempted values \\
+\hline
+Training epochs & 1, 10, 100, 500, 1000  & Prediction converges for all attempted values \\
 \hline
 \end{tabularx}
+The only parameter with any noticable effect is the duration of the input song. This indicates that the issue is not a hyperparameter one but rather a long term memorry issue where the LSTM struggles to maintain stable predictions past approximately 1\% of the training length which can be seen in the figure bellow where the input training duration was 1 second (22050 smaple points).  
+\begin{figure}[H]
+\caption{Showing the best prediction amplitude samples}
+\includegraphics[scale=0.35]{better_convergence.png}
+\end{figure}
+This is promising as it indicates that music generation is plausible given enough computing power for sufficient training. However in this paper we have limited resources. 
+\subsection{Introducing artificial noise}
+A possible to the convergence of prediction values is to periodically introduce some noise to the prediction process to prevent the model from converging to a stationary value. If we notice a sequence of predictions is too similar we can inject some noise by modifying the prediction seed value at each iteration. 
+
+\subsubsection{Fourier Transform results}
+A possible cause of the convergence to a constant predicted value is that the problem is ill phrased. Moreover the problem is too nonlinear for the size of model to converge on a stable solution that doesn't converge to a single value. We can rephrase our problem from what is the next amplitude of sound that comes next to what is the next frequency that comes next. This transformation is naturally done by a Fourier Transform of the data. THe procedure is as follows use FFT to move to the frequency domain, then scale the data. Train the network on this data. Predict using a starting seed that has been transformed and scaled, then invert the scale and use an ifft sheme to obtain amplitude falues that we can write to a sound file. 
+
 \subsection{Conclusion}
 \label{sec:conclusion}
 

@@ -30,7 +30,7 @@ else:
 
 scaler = sklearn.preprocessing.StandardScaler()
 
-def time_blocks_to_fft_blocks(blocks_time_domain):
+def time_to_fft(blocks_time_domain):
     # FFT blocks initialized
     fft_blocks = []
     # for block in blocks_time_domain:
@@ -66,6 +66,7 @@ def fft_to_time(blocks_ft_domain):
     return time_blocks
 
 def get_batches(arr, batch_size, seq_length):
+    #Note this code was taken fomr Udacity course on machine learning. 
     batch_size_total = batch_size * seq_length
     # total number of batches we can make
     n_batches = len(arr)//batch_size_total
@@ -87,17 +88,6 @@ def get_batches(arr, batch_size, seq_length):
             y[:, :-1], y[:, -1] = x[:, 1:], arr[:, 0]
         yield x, y
 
-def sliding_windows(data, seq_length):
-    x = []
-    y = []
-
-    for i in range(len(data)-seq_length-1):
-        _x = data[i:(i+seq_length)]
-        _y = data[i+seq_length]
-        x.append(_x)
-        y.append(_y)
-
-    return np.array(x),np.array(y)
 
 #######################################################################################################################
 
@@ -136,10 +126,13 @@ class NoizeNet(nn.Module):
         
 
         if self.LSTMBool:
-            h_0 = torch.autograd.Variable(torch.zeros(self.num_layers, x.size(0), self.hidden_dim)).cuda() #hidden state
-            c_0 = torch.autograd.Variable(torch.zeros(self.num_layers, x.size(0), self.hidden_dim)).cuda() #internal state
+            # h_0 = torch.autograd.Variable(torch.zeros(self.num_layers, x.size(0), self.hidden_dim)).cuda() #hidden state
+            # c_0 = torch.autograd.Variable(torch.zeros(self.num_layers, x.size(0), self.hidden_dim)).cuda() #internal state
+            h_0 = hidden
+            c_0 = c0
             # Propagate input through LSTM
-            r_out, (hn, cn) = self.lstm(x, (h_0, c_0)) #lstm with input, hidden, and internal state
+            state = (h_0, c_0)
+            r_out, (hn, cn) = self.lstm(x, state) #lstm with input, hidden, and internal state
             hidden = hn
         else:
             # get RNN outputs
@@ -165,6 +158,7 @@ class NoizeNet(nn.Module):
         #THIS CODE IS FROM UDACITY
         # Create two new tensors with sizes n_layers x batch_size x n_hidden,
         # initialized to zero, for hidden state and cell state of LSTM
+
         weight = next(self.parameters()).data
         
         if (train_on_gpu):
@@ -173,22 +167,32 @@ class NoizeNet(nn.Module):
         else:
             (hidden, c0) = (weight.new(self.num_layers, batch_size, self.hidden_dim).zero_(),
                       weight.new(self.num_layers, batch_size, self.hidden_dim).zero_())
-        
-        return (hidden, c0)
+        # hidden = torch.autograd.Variable(torch.zeros(self.num_layers, 1, self.hidden_dim)).cuda() #hidden state
+        # c0 = torch.autograd.Variable(torch.zeros(self.num_layers, 1, self.hidden_dim)).cuda() #internal state
+        return hidden, c0
 
 
 
 ######################################################################################################################
 
 # train the RNN
-def train(noizeNet, n_steps, AUDIO_DIR, genreTracks, LSTM ,step_size=1, duration=5, numberOfTracks=1, clip=5):
+def train(noizeNet, n_steps, AUDIO_DIR, genreTracks, LSTM ,step_size=1, duration=5, numberOfTracks=1, clip=5, fft_bool=False):
     fileCount = 0 #Used for displaying the file that is currently being trained on
     noizeNet.train() #Set the model to training mode
     lossArr = [] #Array used to plot loss over time
-
+    val_losses = []
     if(train_on_gpu):
         noizeNet.cuda() #Move the model to GPU if available
 
+    val_file = utils.get_audio_path(AUDIO_DIR, genreTracks[-1])
+    val_data, sr = lib.load(val_file, mono=True, duration = duration)
+    if fft_bool:
+        print("We are training on FFT data")
+        val_data = time_to_fft(val_data)
+    val_data = scaler.fit_transform(val_data.reshape(-1,1)) #Scale data
+    hidden = None
+    c0 = None
+    hidden, c0 = noizeNet.init_hidden(1)
     #Loop over all the files in our filtered list
     for id in genreTracks: 
         #Stop training after n files
@@ -198,120 +202,128 @@ def train(noizeNet, n_steps, AUDIO_DIR, genreTracks, LSTM ,step_size=1, duration
 
         filename = utils.get_audio_path(AUDIO_DIR, id) #Get the actual path to the file from the id
         
-
-        # hidden = None
-        # if LSTM:
-        #     c0 = None #LSTM!
-        
         fileData, sr = lib.load(filename, mono=True, duration = duration)
+        fileData = fileData.reshape(-1,1)
+        if fft_bool:
+            fileData = time_to_fft(fileData)
+        fileData = scaler.fit_transform(fileData)
 
-        # fileData = time_blocks_to_fft_blocks(fileData)
-
-        fileData = scaler.fit_transform(fileData.reshape(-1, 1))
-        # x,y = sliding_windows(fileData, 10)
-        data= fileData
-        batch_size = (int)(duration*sr/n_steps)
-        # number_of_steps = len(fileData)-batch_size
-        number_of_steps = 1
-        # print("BATCH SIZE:",  batch_size, "\nNUMBER OF BATCHES:", n_steps ,"\nNUMBER OF STEPS: ", number_of_steps)
+        data = fileData
+        batch_size = (int)(duration*sr/n_steps) #Find the size of the window that slides across the input song
+        number_of_steps = (int)(duration*sr)-batch_size #Assumes step size of one as a larger step size produced poor results
 
         if(np.isnan(np.sum(fileData))):
             print("NAN ON FILE:\t", filename)
             break
-        #FOR TESTING
-        batch_i = 0
-        for e in range(0,100):
-        # for batch_i in (range(0,number_of_steps, step_size)):
-            (hidden, c0) = noizeNet.init_hidden(batch_size)
-        # for x, y in get_batches(fileData, 500, 50):
-            
-            # defining the training data
-            data = fileData[(batch_i): batch_size + batch_i]
-            # data = np.resize(data,((batch_size), 1)) 
-            data = data.reshape(batch_size,1)  
-            # data = data.reshape(len(data),1)    
-            x = data[:-1]
-            y = data[1:]
-
-            # convert data into Tensors
-            x_tensor = torch.Tensor(x).unsqueeze(0)  # unsqueeze gives a 1, batch_size dimension
-            y_tensor = torch.Tensor(y)
-            if(train_on_gpu):
-                    x_tensor, y_tensor = x_tensor.cuda(), y_tensor.cuda()
-            
-            if LSTM:
-                prediction, (hidden, c0) = noizeNet(x_tensor, (hidden, c0)) #LSTM!
-            else:
-                # outputs from the rnn
-                prediction, hidden = noizeNet(x_tensor, hidden)
-            
-            ## Representing Memory ##
-            # make a new variable for hidden and detach the hidden state from its history
-            # this way, we don't backpropagate through the entire history
-            hidden = hidden.data
-
-            if LSTM:
-                c0 = c0.data #LSTM!
-
-
-            # zero gradients
-            optimizer.zero_grad()
-
-            # calculate the loss
-            
-            loss = criterion(prediction, y_tensor)
-            # if(np.isnan(loss)):
-            #     break
-            lossArr.append(loss.item())
-            # perform backprop and update weights
-            loss.backward()
-            
-            torch.nn.utils.clip_grad_value_(noizeNet.parameters(), clip) #Clip gradient
-            optimizer.step()
-
-
-
-            if(int((e*batch_i)) % 1000 == 0):
-                print("PROGRESS:\t", round((fileCount*batch_i/(number_of_steps*numberOfTracks))*100, 2), "%"  , sep="")
-                print("P:\t", prediction.cpu().data.numpy().flatten()[-5:],"\nY:\t", y[-5:].flatten() ,"\nX:\t" , x[-5:].flatten() ,sep="")
-                print('Loss: ', loss.item(), "\t num:", batch_i, "\t File:", fileCount)
-                # val_h = NoizeNet.init_hidden(batch_size)
-                # val_losses = []
-                # NoizeNet.eval()
-                # for e in range(0,2):
-                #     # for batch_i in (range(0,number_of_steps, step_size)):
-
-                #     # One-hot encode our data and make them Torch tensors
-                #     x = one_hot_encode(x, n_chars)
-                #     x, y = torch.from_numpy(x), torch.from_numpy(y)
-                    
-                #     # Creating new variables for the hidden state, otherwise
-                #     # we'd backprop through the entire training history
-                #     val_h = tuple([each.data for each in val_h])
-                    
-                #     inputs, targets = x, y
-                #     if(train_on_gpu):
-                #         inputs, targets = inputs.cuda(), targets.cuda()
-
-                #     output, val_h = net(inputs, val_h)
-                #     val_loss = criterion(output, targets.view(batch_size*seq_length).long())
+        
+        for batch_i in (range(0,number_of_steps, step_size)):
+            for e in range(0,1):
+                # for batch_i in (range(0,number_of_steps, step_size)):
+                # if LSTM:
+                #     (hidden, c0) = noizeNet.init_hidden(batch_size)
+                # for x, y in get_batches(fileData, 500, 50):
                 
-                #     val_losses.append(val_loss.item())
+                # defining the training data
+                data = fileData[(batch_i): batch_size + batch_i]
+                # data = np.resize(data,((batch_size), 1)) 
+                # data = data.reshape(batch_size,1)  
+                # data = data.reshape(len(data),1)    
+                x = data[:-1] #Select all but the last element in the input data
+                y = data[1:] #Select all but the first element in the input data. Essentially a forward shift in time
+
+                # convert data into Tensors
+                x_tensor = torch.Tensor(x).unsqueeze(0)  # unsqueeze gives a 1, batch_size dimension
+                y_tensor = torch.Tensor(y)
+                if(train_on_gpu):
+                        x_tensor, y_tensor = x_tensor.cuda(), y_tensor.cuda()
                 
-                # NoizeNet.train() # reset to train mode after iterationg through validation data
-        # del prediction
-        # del hidden
-        # del x_tensor
-        # del y_tensor
-        # del data
-        # del x
-        # del y
-        # gc.collect()
-        # time_steps = np.linspace((int)(batch_i), (int)((batch_i + batch_size)), (int)(batch_size))
-        # plt.plot(time_steps[1:], prediction.cpu().detach().numpy(), markersize=0.1)
-        # plt.show()
-    plt.plot(lossArr)
-    plt.show()
+                if LSTM:
+                    prediction, (hidden, c0) = noizeNet(x_tensor, hidden, c0) #LSTM!
+                else:
+                    # outputs from the rnn
+                    prediction, hidden = noizeNet(x_tensor, hidden)
+                
+                ## Representing Memory ##
+                # make a new variable for hidden and detach the hidden state from its history
+                # this way, we don't backpropagate through the entire history
+                hidden = hidden.data
+
+                if LSTM:
+                    c0 = c0.data #LSTM!
+
+
+                # zero gradients
+                optimizer.zero_grad()
+
+                # calculate the loss
+                
+                loss = criterion(prediction, y_tensor)
+                # if(np.isnan(loss)):
+                #     break
+                lossArr.append(loss.item())
+                # perform backprop and update weights
+                loss.backward()
+                
+                torch.nn.utils.clip_grad_value_(noizeNet.parameters(), clip) #Clip gradient
+                optimizer.step()
+
+
+                #Validation step
+                if(int((batch_i)) % 1000 == 0):
+                    if LSTM:
+                        (val_h, val_c) = noizeNet.init_hidden(1)
+                    else:
+                        val_h = None
+
+                    
+                    noizeNet.eval()
+                    val_x = val_data[:-1]
+                    val_y = val_data[1:]
+
+                    
+
+                    for e in range(0,1):
+                        val_x, val_y = torch.from_numpy(val_x), torch.from_numpy(val_y)
+                        
+                        
+                        inputs, targets = val_x.reshape(-1,1).unsqueeze(0), val_y.reshape(-1,1)
+                        if(train_on_gpu):
+                            inputs, targets = inputs.cuda(), targets.cuda()
+                        if LSTM:
+                            output, (val_h, val_c) = noizeNet(inputs, val_h, val_c)
+                        else:
+                            output, val_h = noizeNet(inputs, val_h)
+                        val_loss  = criterion(output, targets)
+
+                        val_losses.append(val_loss.item())
+
+                        if LSTM:
+                            val_h = val_h.data
+                            val_c = val_c.data
+                        else:
+                            val_h = val_h.data
+
+
+                    print("Training Progress:\t", round((fileCount*e/(number_of_steps*numberOfTracks))*100, 2), "%"  , sep="")
+                    print("P:\t", prediction.cpu().data.numpy().flatten()[-5:],"\nY:\t", y[-5:].flatten() ,"\nX:\t" , x[-5:].flatten() ,sep="")
+                    print('Training Loss: ', loss.item(), "Validation loss: ", val_loss.item() , "\t num:", batch_i, "\t File:", fileCount)
+                    noizeNet.train() # reset to train mode after validation
+            
+            #Clean unused variables to ensure memory is kept free
+            # del prediction
+            # del hidden
+            # del x_tensor
+            # del y_tensor
+            # del data
+            # del x
+            # del y
+            # gc.collect()
+        fig, ax = plt.subplots(nrows=2)
+        ax[0].plot(lossArr)
+        ax[0].set(title="Training loss", ylabel="Loss", xlabel="Epochs")
+        ax[1].plot(val_losses)
+        ax[1].set(title="Validation loss", ylabel="Loss", xlabel="Epochs")
+        plt.show()
     return noizeNet
 
 ###################################################################################################################
@@ -333,9 +345,11 @@ def predict(noizeNet, genreTrack ,duration=1, n_steps=30, LSTMBool=False, predic
         (hidden, c0) = noizeNet.init_hidden(1)
     filePath = utils.get_audio_path(AUDIO_DIR, genreTrack) #Get the actual path to the file from the id
     y, sr = lib.load(filePath, mono=True, duration = duration)
+    # y = time_to_fft(y)
     y = scaler.fit_transform(y.reshape(-1,1))
+
     data = y
-    # data = time_blocks_to_fft_blocks(y)
+    
 
     #data = np.random.normal(-1,1,y.shape)
     # data = genPerlin(np.linspace(0,1,y.size))
@@ -346,23 +360,23 @@ def predict(noizeNet, genreTrack ,duration=1, n_steps=30, LSTMBool=False, predic
     number_of_steps = (int)(sr*predictDuration/step_size)
 
     music = []
-    next = data[-1:]
+    next = data[batch_size-1]
 
     sf.write('/home/liam/Desktop/University/2021/MAM3040W/thesis/writeup/code/predictionSeed.wav', np.append( data[step_size: batch_size], next), sr,format="WAV")
     print("BATCH SIZE:", batch_size ,sep="\t")
     print("NUMBER OF STEPS:", number_of_steps , sep="\t")
-    data = data[0: batch_size]
+    # data = data[0: batch_size-1]
+    hidden = None
+    c0 = None
+    hidden, c0 = noizeNet.init_hidden(1)
     for batch_i in (range(0, number_of_steps)):
-        (hidden, c0) = noizeNet.init_hidden(1)
         if(train_on_gpu):
             noizeNet.cuda()
-        data = next
-        # data = data[batch_i] #Shrink data
-        # data = np.append(data, next)
-        # data = np.resize(data,(batch_size, 1))
-        data = data.reshape(len(data),1)
-        # data = data.reshape(batch_size,1)
-        x = data
+        data = data[batch_i: batch_size-1 + batch_i]
+        data = np.append(data,next)
+        x = data.reshape(-1,1)
+
+        print(data.shape)
         if(np.isnan(np.sum(data))):
             print("data contains NAN", data)
 
@@ -371,28 +385,23 @@ def predict(noizeNet, genreTrack ,duration=1, n_steps=30, LSTMBool=False, predic
                 x_tensor = x_tensor.cuda()
 
         if(LSTMBool):
-            prediction, (hidden, c0) = noizeNet(x_tensor, (hidden, c0))
+            prediction, (hidden, c0) = noizeNet(x_tensor, hidden, c0)
             c0 = c0.data
         else:
             prediction, hidden = noizeNet(x_tensor, hidden)
         hidden = hidden.data
         
         
-        music = np.append(music,(prediction.cpu().data.numpy().flatten())[-step_size:])
-        next = prediction.cpu().data.numpy().flatten()[-step_size:]
+        music = np.append(music,(prediction.cpu().data.numpy().flatten())[-1])
+        next = prediction.cpu().data.numpy().flatten()[-1]
         
-        # print(music.size, next.size)
-        # print(next, data.size, data[-5:])
-        # print(prediction)
         if(int((batch_i)) % 100 == 0):
-            # time_steps = np.linspace((int)(batch_i), (int)((batch_i + batch_size)), (int)(batch_size))
-            # plt.plot(time_steps, prediction.cpu().detach().numpy(), markersize=0.1)
-            fig, ax = plt.subplots(nrows=2)
-            ax[0].plot(prediction.cpu().data.numpy())
-            ax[1].plot(scaler.inverse_transform(prediction.cpu().data.numpy()))
-            print(np.average(prediction.cpu().data.numpy()))
-            print(prediction.cpu().data.numpy().flatten()[-1:])
-            print(x)
+            # fig, ax = plt.subplots(nrows=2)
+            # ax[0].plot(prediction.cpu().data.numpy())
+            # ax[1].plot(scaler.inverse_transform(prediction.cpu().data.numpy()))
+            # print(np.average(prediction.cpu().data.numpy()))
+            # print(prediction.cpu().data.numpy().flatten()[-1:])
+            # print(x)
             # ax[1].plot(fft_to_time(prediction.cpu().detach().numpy()))
             # plt.show()
             
@@ -401,10 +410,10 @@ def predict(noizeNet, genreTrack ,duration=1, n_steps=30, LSTMBool=False, predic
        
     # print(fft_to_time(music))  
     print(music)
-    music = scaler.inverse_transform(music)
-    music = prediction.cpu().detach().numpy()
-    music = abs(fft_to_time(music))#.astype('float32')
-    print(music)
+    music = scaler.inverse_transform(music.reshape(-1,1))
+    # music = prediction.cpu().detach().numpy()
+    # music = abs(fft_to_time(music))#.astype('float32')
+    # print(music)
     sf.write('/home/liam/Desktop/University/2021/MAM3040W/thesis/writeup/code/outputSoundFile.wav', (music), 22050,format="WAV")
     time_steps = np.linspace(0, len(music), len(music))
     plt.plot(time_steps, music,"b.",  markersize=0.1)
@@ -416,104 +425,83 @@ def predict2(noizeNet, genreTrack ,duration=1, n_steps=30, LSTMBool=False, predi
     noizeNet.eval()
 
     if LSTMBool:
-        (hidden, c0) = noizeNet.init_hidden(1)
+        hidden, c0 = noizeNet.init_hidden(1)
+    else:
+        hidden = None
     filePath = utils.get_audio_path(AUDIO_DIR, genreTrack) #Get the actual path to the file from the id
     y, sr = lib.load(filePath, mono=True, duration = duration)
-    sf.write('/home/liam/Desktop/University/2021/MAM3040W/thesis/writeup/code/Predict2Seed.wav', (y), 22050,format="WAV")
+    sf.write('/home/liam/Desktop/University/2021/MAM3040W/thesis/writeup/code/Predict2Seed.wav', y, 22050,format="WAV")
     y = scaler.fit_transform(y.reshape(-1,1))
  
     batch_size = (int)(sr*duration/n_steps)
 
     number_of_steps = (int)(sr*duration/step_size)
-    print()
     music = []
     for batch_i in (range(0, number_of_steps)):
         if(train_on_gpu):
             noizeNet.cuda()
         data = y[batch_i]
-        print("y",y.shape)
-        print("data",data.shape)
-        data = data.reshape(len(data),1)
-        print("data val",data)
+        data = data.reshape(-1,1)
         x = data
-        # print(x)
+
 
         x_tensor = torch.Tensor(x).unsqueeze(0)  # unsqueeze gives a 1, batch_size dimension
         if(train_on_gpu):
                 x_tensor = x_tensor.cuda()
 
         if(LSTMBool):
-            prediction, (hidden, c0) = noizeNet(x_tensor, (hidden, c0))
+            prediction, (hidden, c0) = noizeNet(x_tensor, hidden, c0)
             c0 = c0.data
         else:
             prediction, hidden = noizeNet(x_tensor, hidden)
         hidden = hidden.data
         
-        
+        print(prediction.cpu().data.numpy().shape)
         music = np.append(music,(prediction.cpu().data.numpy().flatten())[-step_size:])
-        print(music.shape)
-        # print(next, data.size, data[-5:])
-        # print(prediction)
-        if(int((batch_i)) % 100 == 0):
-            # print((prediction.cpu().data.numpy()))
-            # print(x)
-            # print(prediction.cpu().data.numpy().flatten()[-1:])
+        if(int((batch_i)) % 1000 == 0):
             print("PROGRESS:\t", round(((batch_i)/number_of_steps)*100, 2), "%"  , sep="")
             print("Prediction dimensions:\t", prediction.cpu().size(), "\t" ,prediction.cpu().data.numpy().flatten().size, "\nMusic dimensions:\t", music.size ,sep="")
        
-    # print(fft_to_time(music))  
-    # print(music)
-    # music = scaler.inverse_transform(music)
-    # music = music.cpu().data.numpy().flatten()
-    # music = abs(fft_to_time(music))#.astype('float32')
-    print(music)
     sf.write('/home/liam/Desktop/University/2021/MAM3040W/thesis/writeup/code/outputSoundFilePredict2.wav', (music), 22050,format="WAV")
     time_steps = np.linspace(0, len(music), len(music))
     plt.plot(time_steps, music,"b.",  markersize=1)
     plt.show()
-    return music
+    if LSTMBool:
+        return music, (hidden, c0)
+    else: 
+        return music, hidden
 
-def predict3(noizeNet, seeded ,duration=1, n_steps=30, LSTMBool=False, predictDuration = 30, step_size=1):
+def predict3(noizeNet, seeded ,duration=1, n_steps=30, LSTMBool=False, predictDuration = 30, step_size=1, hidden = None, c0 = None):
     print("PREDICTING...")
     noizeNet.eval()
-
-    if LSTMBool:
-        (hidden, c0) = noizeNet.init_hidden(1)
-
-    seeded = scaler.fit_transform(np.array([seeded]).reshape(-1,1))
- 
-    
     number_of_steps = (int)(22050*predictDuration/step_size)
     music = []
 
     for batch_i in (range(0, number_of_steps)):
         if(train_on_gpu):
             noizeNet.cuda()
+        seeded = np.array([seeded]).reshape(-1,1)
         data = seeded
-        data = data.reshape(1,1)
+        if batch_i % 200 == 0:
+            data = seeded*np.random.normal(-1,1)
+        data = data.reshape(-1,1)
         x = data
-
+        
         x_tensor = torch.Tensor(x).unsqueeze(0)  # unsqueeze gives a 1, batch_size dimension
+        print("x_tensor",x_tensor)
         if(train_on_gpu):
                 x_tensor = x_tensor.cuda()
 
-        if(LSTMBool):
-            prediction, (hidden, c0) = noizeNet(x_tensor, (hidden, c0))
+        if (LSTMBool):
+            prediction, (hidden, c0) = noizeNet(x_tensor, hidden, c0)
             c0 = c0.data
         else:
             prediction, hidden = noizeNet(x_tensor, hidden)
         hidden = hidden.data
         
-        seeded = prediction.cpu().data.numpy()
-        print(seeded)
+        seeded = prediction.cpu().data.numpy()[-1:step_size:]
         music = np.append(music,(prediction.cpu().data.numpy().flatten())[-step_size:])
-        # print(music.shape)
-        # print(next, data.size, data[-5:])
-        # print(prediction)
         if(int((batch_i)) % 10000 == 0):
-            # print((prediction.cpu().data.numpy()))
-            # print(x)
-            # print(prediction.cpu().data.numpy().flatten()[-1:])
             print("PROGRESS:\t", round(((batch_i)/number_of_steps)*100, 2), "%"  , sep="")
             print("Prediction dimensions:\t", prediction.cpu().size(), "\t" ,prediction.cpu().data.numpy().flatten().size, "\nMusic dimensions:\t", music.size ,sep="")
        
@@ -541,7 +529,7 @@ def generateModelName(n_steps = 30, print_every = 5, step_size =  1, duration = 
 input_size=1
 output_size=1
 hidden_dim=100
-n_layers=1
+n_layers=2
 LSTMBool = True
 dropout_prob = 0.5
 
@@ -551,10 +539,12 @@ print(noizeNet)
 ######################################################################################################################
 
 # MSE loss and Adam optimizer with a learning rate of 0.01
-# criterion = nn.MSELoss()
+criterion = nn.MSELoss()
 lr=0.0001
-criterion = nn.L1Loss()
-optimizer = torch.optim.Adam(noizeNet.parameters(), lr=lr)
+# criterion = nn.L1Loss()
+# optimizer = torch.optim.Adam(noizeNet.parameters(), lr=lr)
+# optimizer = torch.optim.SGD(noizeNet.parameters(),lr=lr)
+optimizer = torch.optim.Adadelta(noizeNet.parameters())
 
 #Get metadata for fma dataset
 AUDIO_DIR = "data/fma_small/"
@@ -570,23 +560,29 @@ genreTracks = list(tracks.loc[small & (genre1),('track', 'genre_top')].index)
 #Set if we want to train new model or load and predict with saved model
 TRAIN = True
 
-n_steps = 1 #The number of full frame steps to be taken to complete training
+n_steps = 30 #The number of full frame steps to be taken to complete training
 print_every = 5 
 step_size =  1 #The step size taken by each training frame 
 duration = 1 #The duration of the training segment
-predictDuration = 1#The duration of the predicted song is seconds
+predictDuration = 1 #The duration of the predicted song is seconds
 numberOfTracks = 1 #The number of tracks to be trained on
-clip = 5 #Gradient clipping
+clip = 1 #Gradient clipping
 seedDuration = 1
 
 
 if TRAIN:
     print("TRAINING...")
     trained_rnn = train(noizeNet, n_steps,AUDIO_DIR, genreTracks, LSTMBool ,step_size=step_size, duration = duration, numberOfTracks=numberOfTracks, clip=clip)
-    # torch.save(trained_rnn.state_dict(), "/home/liam/Desktop/University/2021/MAM3040W/thesis/writeup/" + generateModelName(n_steps, print_every, step_size, duration, numberOfTracks, clip, LSTMBool, hidden_dim,n_layers))
+    torch.save(trained_rnn.state_dict(), "/home/liam/Desktop/University/2021/MAM3040W/thesis/writeup/" + generateModelName(n_steps, print_every, step_size, duration, numberOfTracks, clip, LSTMBool, hidden_dim,n_layers))
     duration = seedDuration
-    predicted = predict2(trained_rnn, genreTracks[-2] ,duration=duration, n_steps=n_steps, LSTMBool=LSTMBool, predictDuration = predictDuration)
-    predict3(noizeNet, predicted[-2] ,duration=duration, n_steps=n_steps, LSTMBool=LSTMBool, predictDuration = predictDuration)
+    # predict(trained_rnn, genreTracks[-1] ,duration=duration, n_steps=n_steps, LSTMBool=LSTMBool, predictDuration = predictDuration, step_size=step_size)
+    if LSTMBool:
+        predicted, (hidden, c0) = predict2(trained_rnn, genreTracks[-2] ,duration=duration, n_steps=n_steps, LSTMBool=LSTMBool, predictDuration = predictDuration)
+        predict3(noizeNet, predicted[-1] ,duration=duration, n_steps=n_steps, LSTMBool=LSTMBool, predictDuration = predictDuration,  hidden=hidden, c0 =c0)
+    else: 
+        predicted, hidden = predict2(trained_rnn, genreTracks[-2] ,duration=duration, n_steps=n_steps, LSTMBool=LSTMBool, predictDuration = predictDuration)
+        predict3(noizeNet, predicted[-1] ,duration=duration, n_steps=n_steps, LSTMBool=LSTMBool, predictDuration = predictDuration,  hidden=hidden)
+    
 
     
 
@@ -595,8 +591,12 @@ else:
     noizeNet = NoizeNet(input_size, output_size, hidden_dim, n_layers, LSTMBool, dropout_prob)
     noizeNet.load_state_dict(torch.load("/home/liam/Desktop/University/2021/MAM3040W/thesis/writeup/code/good model/n_steps=1__print_every=5__step_size=1__duration=10__numberOfTracks=100__clip=5__LSTMBool=Truehidden_dim=200__n_layers=1__lr=0.0001.pt"))
     duration = seedDuration
-    predicted = predict2(noizeNet, genreTracks[-2] ,duration=duration, n_steps=n_steps, LSTMBool=LSTMBool, predictDuration = predictDuration)
-    predict3(noizeNet, genreTracks[-2] ,duration=duration, n_steps=n_steps, LSTMBool=LSTMBool, predictDuration = predictDuration)
+    if LSTMBool:
+        predicted, (hidden, c0) = predict2(noizeNet, genreTracks[-2] ,duration=duration, n_steps=n_steps, LSTMBool=LSTMBool, predictDuration = predictDuration)
+        predict3(noizeNet, predicted[-1] ,duration=duration, n_steps=n_steps, LSTMBool=LSTMBool, predictDuration = predictDuration,  hidden=hidden, c0 =c0)
+    else: 
+        predicted, hidden = predict2(noizeNet, genreTracks[-2] ,duration=duration, n_steps=n_steps, LSTMBool=LSTMBool, predictDuration = predictDuration)
+        predict3(noizeNet, predicted[-1] ,duration=duration, n_steps=n_steps, LSTMBool=LSTMBool, predictDuration = predictDuration,  hidden=hidden)
 
 
 

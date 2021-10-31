@@ -282,7 +282,9 @@ def train(noizeNet, n_steps, AUDIO_DIR, genreTracks, LSTM ,step_size=1, duration
 
                     
 
-                    for e in range(0,1):
+                    for e in range(0,10):
+                        val_x = val_data[:-1]
+                        val_y = val_data[1:]
                         val_x, val_y = torch.from_numpy(val_x), torch.from_numpy(val_y)
                         
                         
@@ -540,7 +542,7 @@ print(noizeNet)
 
 # MSE loss and Adam optimizer with a learning rate of 0.01
 criterion = nn.MSELoss()
-lr=0.0001
+lr=0.00001
 # criterion = nn.L1Loss()
 # optimizer = torch.optim.Adam(noizeNet.parameters(), lr=lr)
 # optimizer = torch.optim.SGD(noizeNet.parameters(),lr=lr)
@@ -563,9 +565,9 @@ TRAIN = True
 n_steps = 30 #The number of full frame steps to be taken to complete training
 print_every = 5 
 step_size =  1 #The step size taken by each training frame 
-duration = 1 #The duration of the training segment
+duration = 0.1 #The duration of the training segment
 predictDuration = 1 #The duration of the predicted song is seconds
-numberOfTracks = 1 #The number of tracks to be trained on
+numberOfTracks = 10 #The number of tracks to be trained on
 clip = 1 #Gradient clipping
 seedDuration = 1
 
@@ -583,7 +585,6 @@ if TRAIN:
         predicted, hidden = predict2(trained_rnn, genreTracks[-2] ,duration=duration, n_steps=n_steps, LSTMBool=LSTMBool, predictDuration = predictDuration)
         predict3(noizeNet, predicted[-1] ,duration=duration, n_steps=n_steps, LSTMBool=LSTMBool, predictDuration = predictDuration,  hidden=hidden)
     
-
     
 
 else:

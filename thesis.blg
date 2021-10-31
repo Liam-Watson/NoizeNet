@@ -1,23 +1,23 @@
 [0] Config.pm:311> INFO - This is Biber 2.16
 [0] Config.pm:314> INFO - Logfile is 'thesis.blg'
-[41] biber:340> INFO - === Sun Oct 31, 2021, 16:01:07
-[49] Biber.pm:415> INFO - Reading 'thesis.bcf'
-[88] Biber.pm:952> INFO - Found 17 citekeys in bib section 0
-[95] Biber.pm:4340> INFO - Processing section 0
-[101] Biber.pm:4531> INFO - Looking for bibtex format file 'references.bib' for section 0
-[102] bibtex.pm:1689> INFO - LaTeX decoding ...
-[111] bibtex.pm:1494> INFO - Found BibTeX data source 'references.bib'
-[127] Utils.pm:384> WARN - legacy month field 'December' in entry 'Nielsen' is not an integer - this will probably not sort properly.
-[129] Utils.pm:384> WARN - legacy month field 'October' in entry '3blue1brown' is not an integer - this will probably not sort properly.
-[136] Utils.pm:384> WARN - legacy month field 'Feb' in entry 'sak_senior_beaufays_2014' is not an integer - this will probably not sort properly.
-[152] Utils.pm:384> WARN - legacy month field 'Jun' in entry 'isoMP3' is not an integer - this will probably not sort properly.
-[212] Utils.pm:384> WARN - legacy month field 'sep' in entry 'harris2020array' is not an integer - this will probably not sort properly.
-[216] Utils.pm:384> WARN - legacy month field 'Feb' in entry 'zhang_he_sra_jadbabaie_2020' is not an integer - this will probably not sort properly.
-[218] Utils.pm:384> WARN - legacy month field 'June' in entry 'stanford' is not an integer - this will probably not sort properly.
-[232] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[232] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[232] Biber.pm:4168> INFO - Sorting list 'ynt/global//global/global' of type 'entry' with template 'ynt' and locale 'en-US'
-[232] Biber.pm:4174> INFO - No sort tailoring available for locale 'en-US'
-[243] bbl.pm:654> INFO - Writing 'thesis.bbl' with encoding 'UTF-8'
-[257] bbl.pm:757> INFO - Output to thesis.bbl
-[257] Biber.pm:128> INFO - WARNINGS: 7
+[39] biber:340> INFO - === Mon Nov  1, 2021, 00:30:14
+[47] Biber.pm:415> INFO - Reading 'thesis.bcf'
+[84] Biber.pm:952> INFO - Found 17 citekeys in bib section 0
+[92] Biber.pm:4340> INFO - Processing section 0
+[98] Biber.pm:4531> INFO - Looking for bibtex format file 'references.bib' for section 0
+[98] bibtex.pm:1689> INFO - LaTeX decoding ...
+[108] bibtex.pm:1494> INFO - Found BibTeX data source 'references.bib'
+[123] Utils.pm:384> WARN - legacy month field 'December' in entry 'Nielsen' is not an integer - this will probably not sort properly.
+[125] Utils.pm:384> WARN - legacy month field 'October' in entry '3blue1brown' is not an integer - this will probably not sort properly.
+[132] Utils.pm:384> WARN - legacy month field 'Feb' in entry 'sak_senior_beaufays_2014' is not an integer - this will probably not sort properly.
+[149] Utils.pm:384> WARN - legacy month field 'Jun' in entry 'isoMP3' is not an integer - this will probably not sort properly.
+[173] Utils.pm:384> WARN - legacy month field 'sep' in entry 'harris2020array' is not an integer - this will probably not sort properly.
+[212] Utils.pm:384> WARN - legacy month field 'Feb' in entry 'zhang_he_sra_jadbabaie_2020' is not an integer - this will probably not sort properly.
+[213] Utils.pm:384> WARN - legacy month field 'June' in entry 'stanford' is not an integer - this will probably not sort properly.
+[228] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[228] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[228] Biber.pm:4168> INFO - Sorting list 'ynt/global//global/global' of type 'entry' with template 'ynt' and locale 'en-US'
+[228] Biber.pm:4174> INFO - No sort tailoring available for locale 'en-US'
+[239] bbl.pm:654> INFO - Writing 'thesis.bbl' with encoding 'UTF-8'
+[253] bbl.pm:757> INFO - Output to thesis.bbl
+[253] Biber.pm:128> INFO - WARNINGS: 7

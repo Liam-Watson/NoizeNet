@@ -29,21 +29,22 @@ sorting=ynt
 \geometry{legalpaper, margin=0.7in}
 
 \title{Noize net | Investigation into novel music genration using recurrent models}
-\author{Liam Watson}
+\author{Liam Watson \\
+Supervisor: Dr. C.M. Rohwer}
 \begin{document}
 \maketitle
 \tableofcontents
 \section{Abstract}
-In this paper we give a brief overview of the structure, mathematics and reasoning used in neural networks and lead on to the structure and reasoning of recurrent models. We discuss RNN's as well as LSTM's and investigate their use in the generation of novel music. We discuss the various problems that arise when dealing with large, highly nonlinear data when using recurrent models and possible solutions. We discuss the implementation of an RNN and LSTM as well as the various hyper parameters that arise (the code can be found \href{https://github.com/Liam-Watson/NoizeNet/blob/main/code/FinalNoteBook.ipynb}{here}). We find that NoizeNet predictions converge to a constant value after few iterations and discuss potential solutions to this phenomenon. Overall find that novel music generation is feasible, however, it requires large input sequences and highly complex models. Given the lack of computational resources available in this work we cover data transformations and introduction of selective perturbations in order to improve results and find that they are ineffective.
+In this paper we give a brief overview of the structure, mathematics and reasoning used in neural networks and lead on to the structure and reasoning of recurrent models. We discuss RNN's as well as LSTM's and investigate their use in the generation of novel music. We discuss the various problems that arise when dealing with large, highly nonlinear data when using recurrent models and possible solutions. We discuss the implementation of an RNN and LSTM as well as the various hyper parameters that arise (the code can be found \href{https://github.com/Liam-Watson/NoizeNet/blob/main/code/FinalNoteBook.ipynb}{here}). We find that NoizeNet predictions converge to a constant value after few iterations and discuss potential solutions to this phenomenon. Overall we find that novel music generation is feasible, however, it requires large input sequences and highly complex models. Given the lack of computational resources available in this work we cover data transformations and introduction of selective perturbations in order to improve results and find that they are ineffective.
 \section{Introduction}
-Artificial intelligence and machine learning has been a topic of much debate for many years in the theoretical space, however, in recent times advancements in computational power and theoretical models have brought these concepts into reality. The field of machine learning is broad with many types of models such as K Nearest Neighbors, decision trees, random forests and the topic of this paper neural networks. These different models have widely varying structural and behavioral properties but share the same defining principle, given some data the models have a scheme that they can use to learn how to better predict the some outcome from the input data data whether it be classification or time series prediction. These different models can be used to predict highly nonlinear data which before was infeasible with techniques like linear regression dominating the data analysis sphere. \\
+Artificial intelligence and machine learning has been a topic of much debate for many years in the theoretical space, however, in recent times advancements in computational power and theoretical models have brought these concepts into reality. The field of machine learning is broad with many types of models such as K Nearest Neighbors, decision trees, random forests and the topic of this paper neural networks. These different models have widely varying structural and behavioral properties but share the same defining principle, given some data the models have a scheme that they can use to learn how to better predict some outcome from the input data data whether it be classification or time series prediction. These different models can be used to predict highly nonlinear data which before was infeasible with techniques like linear regression dominating the data analysis sphere. \\
 In this paper we wish to investigate the feasibility of music generation using a class of neural network called an RNN which is specifically designed for time series data analysis.  
 \section{Introduction to Neural networks}
 \label{sec:intro}
 Before we proceed to the more advanced recurrent neural network let us begin with an abbreviated coverage of neural networks and the concepts underpinning them. 
 \subsection{Perceptron}
 \label{sec:peceptrons}
-The simplest unit of a neural network is a perceptron. A perceptron a model that takes input $\{x_1, x_2, ... ,x_n\}$ along with some weights for each input $\{w_1, w_2, .., w_N\}$. The output is a binary value determined by a step function centered at some value. \cite{Nielsen} We can adjust the center point of the step function using an additional input weight, the bias $b$ which can be seen in figure 1.
+The simplest unit of a neural network is a perceptron. A perceptron is a model that takes input $\{x_1, x_2, ... ,x_n\}$ along with some weights for each input $\{w_1, w_2, .., w_N\}$. The output is a binary value determined by a step function centered at some value. \cite{Nielsen} We can adjust the center point of the step function using an additional input weight, the bias $b$ which can be seen in figure 1.
 \begin{figure}[H]
 \centering
 \caption{Perceptron showing N input variables, N weights and a bias}
@@ -72,7 +73,7 @@ The output of the perceptron is calculated by point wise multiplying the weights
 \end{bmatrix}\right) = \sigma \left(w\cdot x\right)
 \end{align*}
 Given these inputs and bias we can adjust weights and bias to satisfy our desired output after summation and activation function (\ref{sec:activationfuncs}). 
-More rigorously: Given some input $\{x_i\} \forall i\in \mathbb{Z^+}$ predict some $y=\sigma(W_i x_i)$ where $\sigma$ is the Heaviside step function. This model is only useful for very simple binary classification problems and has very little real world application in this form.
+More rigorously: given some input $\{x_i\} \forall i\in \mathbb{Z^+}$ predict some $y=\sigma(W_i x_i)$ where $\sigma$ is the Heaviside step function. This model is only useful for very simple binary classification problems and has very little real world application in this form.
 
 \pagebreak
 
@@ -84,7 +85,7 @@ We only begin to see the utility when we start connecting perceptrons together i
 \label{fig:mlp}
 \includegraphics[scale=2]{nn.jpg}
 \end{figure}
-The mathematics here is similar to the single perceptron but, now the input values for any layer is determined by the previous layer. Mathematically this is readily represented as matrix vector multiplication. 
+The mathematics here is similar to the single perceptron but, now the input values for any layer are determined by the previous layer. Mathematically this is readily represented as matrix vector multiplication. 
 \begin{align*}
 \sigma \left(\begin{bmatrix}
 &w_{1,1} &w_{1,2} &.&.&. &w_{1,n} \\
@@ -116,7 +117,7 @@ The mathematics here is similar to the single perceptron but, now the input valu
 Where the activation function is applied to each of the resulting vector elements. 
 \subsection{Activation functions}
 \label{sec:activationfuncs}
-A binary step function is very limiting in terms of application to the real world, a continuous output would be far more useful for classification probabilities or in our case of this work, music generation. There are many functions that are used in the literature but here we give give a quick overview of the most common functions and their uses. The purpose of an activation function is to format the output of a perceptron into the desired range as the value could be any real value. We begin with the most elementary of these functions (excluding the identity function defined as $f(x) = x$). 
+A binary step function is limiting in terms of application to the real world, a continuous output would be far more useful for classification probabilities or in our case of this work, music generation. There are many functions that are used in the literature but here we give a brief overview of the most common functions and their uses. The purpose of an activation function is to format the output of a perceptron into the desired range as the value could be any real value. We begin with the most elementary of these functions (excluding the identity function defined as $f(x) = x$). 
 \begin{enumerate}
 \item The binary step function \\
 Definition:
@@ -175,7 +176,7 @@ This activation function is less widely used than the sigmoid function but is re
 
 \subsection{Feed forward}
 \label{sec:forward}
-Now we have covered how to calculate the activation's of each neuron in the network, we can now begin using the output. The output of the network is obtained during the feed forward stage of a network. The network will receive input's at the input neurons and propagate through all the network layers calculating activation's until the algorithm reaches the output layer. The activation's at the output layer are considered the network prediction. One can see why the phase is called feed forward, as the network propagates activation's "left to right", forward through the network. 
+Now we have covered how to calculate the activation's of each neuron in the network, we can now begin using the output. The output of the network is obtained during the feed forward stage of a network. The network will receive inputs at the input neurons and propagate through all the network layers calculating activation's until the algorithm reaches the output layer. The activation's at the output layer are considered the network prediction. One can see why the phase is called feed forward, as the network propagates activation's "left to right", forward through the network. 
 \subsection{Error functions (Loss functions)}
 \label{sec:error}
 Once we have output from the model, we need a metric for the error between the output prediction and ground truth, an error function. There are many error functions that appear in the literature, however, their use is often highly application dependent. In the case of music generation we are dealing with simple two dimensional time series data and as such the relevant error functions are elementary:
@@ -198,18 +199,18 @@ If the application requires a signed error function the MBE error function could
 MBE = \frac{\sum_{i=0}^N (y_i - y_i^\prime)}{N}
 \end{align*}
 \end{enumerate}
-It should be noted that more complex loss functions are used for categorical data such as cross entropy loss or hinge Loss.
+It should be noted that more complex loss functions are used for categorical data such as cross entropy loss or hinge loss.
 
 \subsection{Gradient decent}
 \label{sec:gradientDecent}
-Now we need a method to update the perceptron weights given some value for the error between some prediction and ground truth, for this we use gradient decent. There are many adaptions of gradient descent that aim to optimize its computational performance or over come some issue with converging to a poorly optimised solution such as fast gradient methods or momentum adapted gradient descent methods. \\
+Now we need a method to update the perceptron weights given some value for the error between some prediction and ground truth, for this we use gradient decent. There are many adaptions of gradient descent that aim to optimize its computational performance or overcome some issue with converging to a poorly optimised solution such as fast gradient methods or momentum adapted gradient descent methods. \\
 The aim of gradient descent is to iteratively optimize the perceptron weights in order to converge on a minimum loss (likely a local minimum) by taking steps in the direction of steepest descent, after many iterations we will find that the networks weights are well optimised for some goal. However we may find that a local minimum is not sufficient for our purposes and as such may need to employ some hyper parameter tuning such as changing the the step size we take or adding momentum in the hope that we converge to a more optimal solution.
 \begin{figure}[H]
 \centering
 \caption{A plot of $f(x,y) = \sin(x) + \sin(y)$ with a path showing gradient decent steps}
 \includegraphics[scale=0.2]{mesh.png}
 \end{figure}
-Mathematically gradient descent is a simple optimization problem. First we must define the function that we wish to minimise. The cost is defined by some error function of the weights as discussed above where in the context of a neural network we sum the "difference"(absolute, squared or standard) between each of the output neurons and the ground truth value, then divide by the number of elements. So if we have some function that calculates the cost for all the weights over all the training data (a so called cost function $C(\mathbf{W})$) we can calculate the gradient $\nabla C$ and take a step in the opposite direction $-\nabla C$ as we wish to find the minimum of the cost function. By taking a step we mean that we adjust the weights and biases in order move in down the slope by some step size $\eta$. The magnitude and sign of the gradient of the cost function encodes the direction and magnitude of the amount that we must change the weights and biases in order to make the optimal change in their values. 
+Mathematically gradient descent is a simple optimization problem. First we must define the function that we wish to minimise. The cost is defined by some error function of the weights as discussed above where in the context of a neural network we sum the "difference"(absolute, squared or standard) between each of the output neurons and the ground truth value, then divide by the number of elements. So if we have some function that calculates the cost for all the weights over all the training data (a so called cost function $C(\mathbf{W})$) we can calculate the gradient $\nabla C$ and take a step in the opposite direction $-\nabla C$ as we wish to find the minimum of the cost function. By taking a step we mean that we adjust the weights and biases by some small amount in order to move down the slope by some step size $\eta$. The magnitude and sign of the gradient of the cost function encodes the direction and magnitude of the amount that we must change the weights and biases in order to make the optimal change in their values. 
 \subsection{Back propagation}
 \label{sec:back}
 Back propagation is the learning step for a model. Once we have completed the feed forward step and calculated the error we need to travel back through the network and adjust the weights and biases in order to optimize the model, decrease the cost. We change the weights and bias at each layer recursively according to the gradient descent step.  There is much more to cover here - excluded for brevity - but this is the general idea. 
@@ -222,7 +223,7 @@ When using neural networks for time series data prediction, some semblance of me
 RNNs are designed specifically to learn from sequences of data by passing the hidden state from one step in the sequence to the next step in the sequence, combined with the input. This gives RNNs the ability to predict sequences of values using knowledge of past state as well as current state. 
 \begin{figure}[H]
 \centering
-\caption{RNN basic architecture}
+\caption{Basic RNN architecture}
 \label{fig:RNN}
 \includegraphics[scale=0.5]{RNN.png}
 \end{figure}
@@ -235,13 +236,14 @@ With $h_t$ being the hidden state at some time $t$ that is passed forward to the
 RNNs perform well on sequential data, however, in large time scales the model is likely to suffer from poor long term memory due to repeated gradients diminishing exponentially in time, the so called vanishing gradients problem. An additional contributor to the standard RNNs poor long term memory is that after each RNN cell we pass data through an activation function, which over many repeated transformations can result in loss of information in the data. 
 \subsection{LSTM}
 \label{sec:LSTM}
-Long short-term memory (LSTM) is an extension to the idea of an RNN in that sequential data can be predicted by passing the hidden state of LSTM cells forward in time, however, a more sophisticated design of each unit in an attempt to mitigate information loss due to repeated data transformations and the vanishing gradients problem. The overall architecture of the LSTM cell is displayed bellow and in the following sub sections I will break down what each piece of the cell does and why it is included. 
+Long short-term memory (LSTM) is an extension to the idea of an RNN in that sequential data can be predicted by passing the hidden state of LSTM cells forward in time, however, a more sophisticated design of each unit in an attempt to mitigate information loss due to repeated data transformations and the vanishing gradients problem. The overall architecture of the LSTM cell is displayed below and in the following sub sections I will break down what each piece of the cell does and why it is included. 
 \begin{figure}[H]
+\centering
 \caption{LSTM cell \cite{LSTM}}
-\label{fig:RNN}
+\label{fig:LSTMCell}
 \includegraphics[scale=0.4]{LSTM_cell.png}
 \end{figure}
-The above figure is complex, however, we can decompose the operations into four distinct functional components ("Gates") namely: Learn, forget, remember, and use gates. Each of these four gates has a specific intended function, however, it is pertinent to note that with most statistical models there is little rigorous reasoning to their structure. By combining the following gates (or adding new ones) in novel ways one can form their own cell with desired properties. Another cell commonly referred to in the literature is the Gated Recurrent Unit (GRU) which has a lower computational cost than the LSTM as it only uses two gates, namely the update and reset gates.\\
+The above figure is complex, however, we can simplify the operations into four distinct functional components ("Gates") namely: learn, forget, remember and use gates. Each of these four gates has a specific intended function, however, it is pertinent to note that with most statistical models there is little rigorous reasoning to their structure. By combining the following gates (or adding new ones) in novel ways one can form their own cell with desired properties. Another cell commonly referred to in the literature is the Gated Recurrent Unit (GRU) which has a lower computational cost than the LSTM as it only uses two gates, namely the update and reset gates.\\
 Note: The cell state is sometimes referred to as the long term memory and the hidden state the short term memory.
 \subsubsection{The Learn Gate (Input gate)} 
 The Learn gate determines which information from the hidden state and input should enter the cell state. This is accomplished by passing the previous hidden state $h_{t-1}$ and input $x_t$ through a sigmoid (producing $i_t$) and $\tanh$ activation ($g_t$) functions and combining the results in point wise multiplication.
@@ -295,7 +297,7 @@ The last audio representation we will use in this paper is the spectrogram which
 \label{sec:data}
 
 \subsubsection{Additional data representation}
-Now that it is clear how digital music is represented and viewed we can discuss an additional representation of the data. The musical data in its current format although periodic, is highly nonlinear as decisions made by the artist are somewhat arbitrary without much underlying variable dependence. This is especially true in modern music where traditional notes, tempo and other musical norms are ignored, favoring intuitive qualitative enjoyment of a song. This philosophy to music design results in the underlying sound data being highly erratic and nonlinear which necessitates a more complex model to capture the highly nonlinear behavior. In the two figures bellow one can see the differences between a classical and a modern instrumental song.
+Now that it is clear how digital music is represented and viewed we can discuss an additional representation of the data. The musical data in its current format although periodic, is highly nonlinear as decisions made by the artist are somewhat arbitrary without much underlying variable dependence. This is especially true in modern music where traditional notes, tempo and other musical norms are ignored, favoring intuitive qualitative enjoyment of a song. This philosophy to music design results in the underlying sound data being highly erratic and nonlinear which necessitates a more complex model to capture the highly nonlinear behavior. In the two figures below one can see the differences between a classical and a modern instrumental song.
 \begin{figure}[H]
 \caption{Envelope plots demonstrating classical vs instrumental music behavior}
 \includegraphics[scale=0.35]{Classical_vs_Instrumental.png}
@@ -306,7 +308,7 @@ In order to extract more useful information from the data we can transform some 
 \includegraphics[scale=0.35]{Classical_vs_InstrumentalFFT.png}
 \end{figure}
 \subsubsection{Data used for generation seed}
-In order to generate novel music we need to give the model some initial data to being prediction, referred to as the seed. In this work we will be using three different seeds namely: An unseen instrumental song, random noise and perlin noise.
+In order to generate novel music we need to give the model some initial data to begin prediction, referred to as the seed. In this work we will be using three different seeds namely: An unseen instrumental song, random noise and perlin noise.
 \begin{enumerate}
 \item The instrumental song used as a seed is completely unseen by the model. That is to say the seed is not in the training data. We expect this seed to produce the highest quality results as it is the most similar to the data used in training.
 \item The random noise is generated from numpy's pseudo random normal number generator and qualitatively sounds like static noise \cite{harris2020array}. The reason for the inclusion of this seed is to experiment with how well the model retains an understanding of music when given a completely random input.
@@ -322,7 +324,7 @@ Scaling the input data is an important step in the pre-processing for many reaso
 \item Emphasize important relations in the data
 \item Smoothing input data 
 \item Aiding stable convergence of gradients
-\item Prevents likely hood of over-fitting
+\item Prevents likelyhood of over-fitting
 \end{enumerate}
 There are many different data scaling techniques which may perform differently on different data sets. A list of the most common techniques:
 \begin{enumerate}
@@ -331,11 +333,11 @@ There are many different data scaling techniques which may perform differently o
 \item Log Scaling
 \item Z-score
 \end{enumerate}
-In this paper work we will use Z-scaling as data scaling includes negative values and performs well under testing. It should be noted, however, that as with most choices here the choice is heuristic based and there may be a choice that performs better under certain conditions. The implementation makes use of scikit learn's standard scaler\cite{scikit-learn}.
+In this work we will use Z-scaling as data scaling includes negative values and performs well under testing. It should be noted, however, that as with most choices here the choice is heuristic based and there may be a choice that performs better under certain conditions. The implementation makes use of scikit learn's standard scaler\cite{scikit-learn}.
 \subsection{Architecture of NoizeNet}
 \label{sec:arch}
 Due to music having natural time dependence and periodicity it is wise to develop some recurrent architecture. In this paper we will use a standard RNN as well as an LSTM. Both these models should produce similar predictive behavior with the LSTM expected to exhibit better long term memory characteristics than the standard RNN. \\
-The architecture of the model will consist of several layers: the input layer which typically would include some kind of normalisation or embedding,  recurrent layers and a fully connected layer to translate the recurrent layers output to the output layer. These layers are depicted in the figure bellow:
+The architecture of the model will consist of several layers: the input layer which typically would include some kind of normalisation or embedding,  recurrent layers and a fully connected layer to translate the recurrent layers output to the output layer. These layers are depicted in the figure below:
 \begin{figure}[H]
 \centering
 \caption{Example of NoizeNet architecture demonstrating how music prediction will work}
@@ -350,14 +352,14 @@ The implementation for this work was completed in python with the following fram
 \item Matplot lib \cite{Hunter:2007} and Librosa display \cite{mcfee2015librosa} for graphics rendering
 \item Scikit learn \cite{scikit-learn}, pandas \cite{reback2020pandas} \cite{mckinney-proc-scipy-2010}, librosa \cite{mcfee2015librosa} and numpy \cite{harris2020array} and FMA utils \cite{fma_dataset}\cite{fma_challenge} for data processing 
 \end{enumerate}
-Please see the code repository $\mathbf{\href{https://github.com/Liam-Watson/NoizeNet}{here}}$. Included in the repository are the figures used in this paper, an implementation of the NoizeNet model, a few saved models with varying hyperparameters that will be analysed bellow along with some output predictions and the seeds used to generate them. 
+Please see the code repository $\mathbf{\href{https://github.com/Liam-Watson/NoizeNet}{here}}$. Included in the repository are the figures used in this paper, an implementation of the NoizeNet model, a few saved models with varying hyperparameters that will be analysed below along with some output predictions and the seeds used to generate them. 
 
 One should note that the implementation yields many hyperparameters that can be used to optimise the results produced by a model or computational performance. This is important to this investigation as audio data is very large. The sample rate used in this implementation is 22050Hz, so for a 30 second section of music we find $6.615\cdot 10^{5}$ data points. The large size of data implies, necessarily a large model and complex model, many training/prediction steps and high memory usage. Training on a very small subset of a song will not produce any music like predictions from the model as it will not have seen the macroscopic behavior music during training. \\
 Due to this many hyperparameters had to be tuned for computational performance rather than model optimization. \\
 The high memory requirement is also of note as one has to ensure that any unused memory is cleaned up frequently by the garbage collector. In python this is a relatively trivial procedure but is of note. 
 
-\subsubsection{Hyper-parameters}
-There are many factors that can effect a recurrent model's performance, the factors that one can control are referred to as hyper-parameters. In the table bellow I have included some of the hyperparamets that may influence both the recurrent models' ability to model musical phenomena as well as the influence on the computational cost of the parameter.
+\subsubsection{Hyperparameters}
+There are many factors that can affect a recurrent model's performance, the factors that one can control are referred to as hyper-parameters. In the table below I have included some of the hyperparameters that may influence both the recurrent models' ability to model musical phenomena as well as the influence on the computational cost of the parameter.
 
 \begin{tabularx}{0.8\textwidth} { 
   | >{\raggedright\arraybackslash}X 
@@ -373,9 +375,9 @@ There are many factors that can effect a recurrent model's performance, the fact
 \hline
  Loss criterion  & The influence of the loss criterion is covered in section 3.6.  & For the purposed of this paper we can assume the loss criterion's computational cost negligible. \\
 \hline
- Optimizer  & An optimizer can effect the performance of a models training substantially by ensuring that an optimal set of weights are found.  &  Optimizers can very dramatically, including schemes with momentum. The more complex the optimizer the more computationally expensive. \\
+ Optimizer  & An optimizer can affect the performance of a models training substantially by ensuring that an optimal set of weights are found.  &  Optimizers can vary dramatically, including schemes with momentum. The more complex the optimizer the more computationally expensive. \\
 \hline
- Learning rate  & A good learning rate can ensure the model finds a good local minimum  & The Learning rate doesn't directly influence computational cost, however it does effect the number of epochs one may train their model for.   \\
+ Learning rate  & A good learning rate can ensure the model finds a good local minimum  & The Learning rate doesn't directly influence computational cost, however it does affect the number of epochs one may train their model for.   \\
 \hline
 Gradient Clipping value & The influence of gradient clipping on the model performance is not clear and a decision on the value is heuristic based  & Gradient clipping has been theoretically proven to accelerate training thus decreasing the number of epochs needed during training. \cite{zhang_he_sra_jadbabaie_2020}\\
 \hline
@@ -392,11 +394,11 @@ Note that in the figure above the cost function is represented as $\pazocal{L}$.
 \subsubsection{A note on batching}
 An important consequence of the volume of data is the strategy for how the model will ingest it. 
 There are two places where a model ingests data, namely, during training and prediction. Prediction is fairly simple, we feed the model a sufficiently large amount of data as a seed and its predicted output will then be recursively re ingested, replacing the seed.\\
-However training is more complex as there are two philosophies for ingesting data, in batches or one shot. I will briefly cover why in this paper using one shot input is necessary. The general idea is that batches would be on the order of $10^4$ or less data points with a sample rate of $22050 Hz$ this equates to around a second and is considerably larger than a common batch size. Generally, music has few recognisable patterns on such time scales which is evident in the figure bellow. Due to this training must take place on larger time scales, to better recognise long term periodicity and pattern in the music. That is to say, local data patterns are unimportant to us, we only care about global, macroscopic behavior.\\
+However training is more complex as there are two philosophies for ingesting data, in batches or one shot. I will briefly cover why in this paper using one shot input is necessary. The general idea is that batches would be on the order of $10^4$ or less data points with a sample rate of $22050 Hz$ this equates to around a second and is considerably larger than a common batch size. Generally, music has few recognisable patterns on such time scales which is evident in the figure below. Due to this training must take place on larger time scales, to better recognise long term periodicity and pattern in the music. That is to say, local data patterns are unimportant to us, we only care about global, macroscopic behavior.\\
 An additional factor to consider is that when batching input data is how to divide the batches. If a batch were chosen of arbitrary length, musical notes would be split in half between batches, causing the model to learn behavior that in not representative in music. 
 
 
-We can see this behavior in an LSTM example that is heavily trained on batch data. The predicted output file with the first second of a song as its input seed is, in essence just noise as in a local view. The model is trained on what is essentially noise and so any prediction would resemble a similar pattern. In the figure bellow we can see clearly in the spectrogram and Envelope that there is no discernible pattern. In the Sample view we can see that samples are very erratic and show no progression over time to some frequency. 
+We can see this behavior in an LSTM example that is heavily trained on batch data. The predicted output file with the first second of a song as its input seed is, in essence just noise as in a local view. The model is trained on what is essentially noise and so any prediction would resemble a similar pattern. In the figure below we can see clearly in the spectrogram and Envelope that there is no discernible pattern. In the Sample view we can see that samples are very erratic and show no progression over time to some frequency. 
 \begin{figure}[H]
 \caption{Various views showing the predicted music by an LSTM with batched training data. }
 \includegraphics[scale=0.35]{batch_training.png}
@@ -415,15 +417,16 @@ If we keep track of the loss at each epoch of training across several different 
 \item We expect to see a rise in loss for each new song in the training data set. However if the model is learning more general information about the music we expect each successive song's increase in loss to decrease. It should be noted that this property may not be general as songs vary greatly in their similarity.
 \end{enumerate}
 \begin{figure}[H]
+\centering
 \caption{Plot of loss over 100 epochs of LSTM training on a single input song}
 \includegraphics[scale=0.35]{loss_plot_100itr.png}
 \end{figure}
-Note that the loss does indeed decrease over time, however, there are two things to note. Firstly the loss has "humps" which are likely due to the optimizer attempting to find a better minimum. Secondly over time the loss settles so a near constant value, which could mean that the model is very accurate, over fitted or some other issue. If we attempt to generate a song using this model we can confirm that, indeed there is a problem with the model. This can be seen in the figure bellow where the prediction is some constant value. 
+Note that the loss does indeed decrease over time, however, there are two things to note. Firstly the loss has "humps" which are likely due to the optimizer attempting to find a better minimum. Secondly over time the loss settles to a near constant value, which could mean that the model is very accurate, over fitted or some other issue. If we attempt to generate a song using this model we can confirm that, indeed there is a problem with the model. This can be seen in the figure below where the prediction is some constant value. 
 \begin{figure}[H]
 \caption{Prediction of 1000 amplitude samples with a classical song as the seed}
 \includegraphics[scale=0.35]{overfit_1.png}
 \end{figure}
-Over fitting as a problem that effects most machine learning models. There are many proposed schemes to combat over fitting, a common one that we will use in this work is dropout. Dropout randomly selects arbitrary values to completely drop. In the context of RNN's we introduce a Dropout layer on the outputs of each RNN layer and randomly select values to drop. After including a dropout scheme we can see in the figure bellow that the model no longer exhibits this over fitting behavior during training. It should be noted, however, that the model does still produce a constant output prediction but it takes many more predictions to fix on a constant.
+Over fitting as a problem that effects most machine learning models. There are many proposed schemes to combat over fitting, a common one that we will use in this work is dropout. Dropout randomly selects arbitrary values to completely drop. In the context of RNN's we introduce a Dropout layer on the outputs of each RNN layer and randomly select values to drop. After including a dropout scheme we can see in the figure below that the model no longer exhibits this over fitting behavior during training. It should be noted, however, that the model does still produce a constant output prediction but it takes many more predictions to fix on a constant.
 \begin{figure}[H]
 \caption{Plot of loss over 100 epochs of LSTM training on a single input song}
 \includegraphics[scale=0.35]{loss_dropout_100itr.png}
@@ -433,7 +436,7 @@ We can now verify that the model is learning generalised knowledge. First let us
 \caption{Plot of loss over 100 epochs with 10 songs of 10 epochs each for LSTM}
 \includegraphics[scale=0.35]{loss_plot_10songs.png}
 \end{figure}
-After we have confirmed that the loss is decreasing as expected we need to ensure that the training is generalising to unseen data and confirm that we are not over fitting the model. To check both of these we can use a validation step during training, where periodically we give the model some unseen data as input and check the error of the prediction to the unseen data. Bellow we can see a figure showing that as the loss decreases so does the validation loss. If the model was over fit the validation loss should increase as training continues.
+After we have confirmed that the loss is decreasing as expected we need to ensure that the training is generalising to unseen data and confirm that we are not over fitting the model. To check both of these we can use a validation step during training, where periodically we give the model some unseen data as input and check the error of the prediction to the unseen data. Below we can see a figure showing that as the loss decreases so does the validation loss. If the model was over fit the validation loss should increase as training continues.
 \begin{figure}[H]
 \centering
 \caption{Plot of loss over 20000 epochs with 10 songs of 10 epochs each for with validation every 100 epochs LSTM}
@@ -453,12 +456,12 @@ We can see in the wave plot that the output is relatively smooth on small time s
 It should be noted that although the reproduction is noisy, to the ear the music is definitely recognisable and qualitatively not unpleasant. 
 \subsubsection{RNN and LSTM comparison}
 Here we will compare the performance of an RNN and LSTM model with the same hyperparameters where applicable. 
-For a reproduction the RNN performs slightly worse than the LSTM with the same hyperparameters. The envelope and spectrogram in the figure bellow shows that the RNN reproduction contains more noise than the LSTM. Additionally, the wave plot shows that the RNN produces more erratic output that leads to a qualitatively poor listening experience. It should be noted, however, that the reproduction is still recognisable. 
+For a reproduction the RNN performs slightly worse than the LSTM with the same hyperparameters. The envelope and spectrogram in the figure below shows that the RNN reproduction contains more noise than the LSTM. Additionally, the wave plot shows that the RNN produces more erratic output that leads to a qualitatively poor listening experience. It should be noted, however, that the reproduction is still recognisable. 
 \begin{figure}[H]
 \caption{Showing the reproduction of an unseen song by RNN}
 \includegraphics[scale=0.35]{RNN_Reproduction.png}
 \end{figure}
-The parameters are listed in the table bellow\\
+The parameters are listed in the table below\\
 \begin{tabularx}{0.8\textwidth} { 
   | >{\raggedright\arraybackslash}X 
   | >{\centering\arraybackslash}X 
@@ -480,7 +483,7 @@ The parameters are listed in the table bellow\\
 \hline
  Number of songs to train on  & 5  \\
 \hline
- Duration of song to train on on  & 15s \\
+ Duration of song to train on  & 15s \\
 \hline
 Gradient Clipping value & 1 \\
 \hline
@@ -501,7 +504,7 @@ After approximately 5 iterations of prediction both the RNN and LSTM converge to
 
 \pagebreak
 \subsection{Addressing prediction convergence}
-In this section we will layout the different model and data tuning that was used to solve the prediction value convergence problem. In the table bellow I have expressed the attempted changes and the result of each change. 
+In this section we will lay out the different model and data tuning that was used to solve the prediction value convergence problem. In the table below I have expressed the attempted changes and the result of each change. 
 \begin{tabularx}{0.8\textwidth} { 
   | >{\raggedright\arraybackslash}X 
   | >{\centering\arraybackslash}X 
@@ -538,8 +541,9 @@ Step size& 2205, 11025, 22050, 110250, 100 000  & Prediction converges for all a
 Training epochs & 1, 10, 100, 500, 1000  & Prediction converges for all attempted values \\
 \hline
 \end{tabularx}
-The only parameter with any noticeable effect is the duration of the input song. This indicates that the issue is not a hyperparameter one but rather a long term memory issue where the LSTM struggles to maintain stable predictions past approximately 1\% of the training length which can be seen in the figure bellow where the input training duration was 1 second (22050 sample points).  
+The only parameter with any noticeable effect is the duration of the input song. This indicates that the issue is not a hyperparameter one but rather a long term memory issue where the LSTM struggles to maintain stable predictions past approximately 1\% of the training length which can be seen in the figure below where the input training duration was 1 second (22050 sample points).  
 \begin{figure}[H]
+\centering
 \caption{Showing the best prediction amplitude samples}
 \includegraphics[scale=0.35]{better_convergence.png}
 \end{figure}
@@ -552,7 +556,7 @@ A possible solution to the convergence of prediction values is to periodically i
 \end{figure}
 From the above figure we can see that indeed the scheme does prevent the model from settling for too long on a constant value. However the prediction, qualitatively is just noise, which is evident in the Envelope view. The Wave plot shows us that the noise introduced is low and that the model continuously attempts to move back to the constant. An interesting characteristic of this scheme is the spectrogram shows clear frequency bands indicating some kind of pattern however this pattern does not give rise to any kind of qualitative music. 
 \subsection{Predicting from noise}
-An interesting investigation that we undertake in this section is rather than using a song as a seed we start prediction with some kind of noise. We will cover two types of noise, normal and perlin. First, the normal noise which is just pseudo random noise that fits a normal distribution. I will not show an input figure for brevity as it is uninteresting. 
+An interesting investigation that we undertake in this section is rather than using a song as a seed we start prediction with some kind of noise. We will cover two types of noise: normal and perlin. First, the normal noise which is just pseudo random noise that fits a normal distribution. I will not show an input figure for brevity as it is uninteresting. 
 \begin{figure}[H]
 \caption{Prediction from random normal noise input}
 \includegraphics[scale=0.35]{random_normal_prediction.png}
@@ -569,9 +573,9 @@ Next we generate results using perlin noise as input. Perlin noise has an almost
 \end{figure}
 We can once again see that the prediction value converges to a constant. However in this case we can see before the prediction converges a semi stable frequency is created. Reminiscent of the input perlin noise, without complex music behavior. Both of these tests indicate that the model cannot transform any data into a novel music prediction. In order to generate music one must start with a seed that contains the complex behavior of music but not as complex as random data. 
 \subsection{Fourier Transform results}
-A possible cause of the convergence to a constant predicted value is that the problem is ill phrased. Moreover, the problem is too nonlinear for the size of model to converge on a stable solution. We can rephrase our problem from what is the next to what is the next frequency. This transformation is naturally done by a Fourier Transform of the data. The procedure is as follows use FFT to move to the frequency domain, then scale the data. Train the network on this data. Predict using a starting seed that has been transformed and scaled, then invert the scale and use an ifft scheme to obtain amplitude values that we can write to a sound file. 
+A possible cause of the convergence to a constant predicted value is that the problem is ill phrased. Moreover, the problem is too nonlinear for the size of model to converge on a stable solution. We can rephrase our problem from what is the next amplitude sample to what is the next frequency. This transformation is naturally done by a Fourier Transform of the data. The procedure is as follows: use FFT to move to the frequency domain, then scale the data, train the network on this data, predict using a starting seed that has been transformed and scaled, then invert the scale and use an ifft scheme to obtain amplitude values that we can write to a sound file. 
 
-In the figure bellow we can see the prediction produced by a model trained on the transformed data. 
+In the figure below we can see the prediction produced by a model trained on the transformed data. 
 \begin{figure}[H]
 \caption{Prediction from frequency domain model}
 \includegraphics[scale=0.35]{fs_prediction.png}

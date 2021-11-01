@@ -25,7 +25,7 @@
 \BOOKMARK [3][-]{subsubsection.5.1.5}{Data scaling}{subsection.5.1}% 25
 \BOOKMARK [2][-]{subsection.5.2}{Architecture of NoizeNet}{section.5}% 26
 \BOOKMARK [2][-]{subsection.5.3}{Implementation}{section.5}% 27
-\BOOKMARK [3][-]{subsubsection.5.3.1}{Hyper-parameters}{subsection.5.3}% 28
+\BOOKMARK [3][-]{subsubsection.5.3.1}{Hyperparameters}{subsection.5.3}% 28
 \BOOKMARK [2][-]{subsection.5.4}{A note on numerical stability of the model}{section.5}% 29
 \BOOKMARK [3][-]{subsubsection.5.4.1}{A note on batching}{subsection.5.4}% 30
 \BOOKMARK [2][-]{subsection.5.5}{Results}{section.5}% 31
